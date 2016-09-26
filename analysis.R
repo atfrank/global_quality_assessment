@@ -1,12 +1,12 @@
 # load user functions
-source("global_quality_assessment/library.R")
-
-# initialize data 
-initialize_analysis()
+source("library.R")
 
 # read in pair info used for eight (8) tests of the ability of chemical shifts assess the global quality of NMR structures
-pairs <- read.table(pair_info, col.names = c("pair", "pair_name", "ref", "threshold"))
+pairs <- read.table("data/tests_info", col.names = c("pair", "pair_name", "ref", "threshold"))
 pair_names <- c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2L94_1Z2J","2N82_2N7X","1Z2J_2L94","2N7X_2N82")
+
+# initialize data 
+initialize_analysis(pairs)
 
 #  **** Begin main manuscript analysis ****
 # Part 1:

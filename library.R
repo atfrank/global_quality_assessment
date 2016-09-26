@@ -1,4 +1,4 @@
-initialize_analysis <- function(workdir="~/GitSoftware/global_quality_assessment/"){
+initialize_analysis <- function(pairs, workdir="~/GitSoftware/global_quality_assessment/"){
   # initialize data and variables need for analysis
   # goto analysis directory
   setwd(workdir)
