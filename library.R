@@ -1,4 +1,25 @@
+initialize_analysis <- function(workdir="~/GitSoftware/global_quality_assessment/"){
+  # initialize data and variables need for analysis
+  # goto analysis directory
+  setwd(workdir)
+  
+  # data for composite NMR bundle
+  compile_data(pairs, FALSE, FALSE)
+  
+  # data for average structure
+  compile_data(pairs, TRUE, FALSE)
+  
+  # data for nmr-xray pairs
+  compile_data(pairs, FALSE, TRUE)
+  
+  # merge free and bound chemical shifts to ensure we only use common chemical shifts
+  merge_free_bound("2N7X", "2N82")
+  merge_free_bound("1Z2J", "2L94")
+
+}
+
 compile_data <- function(pairs, average_data=FALSE, nmr_xray=FALSE, corrected_shifts = FALSE){
+  # function to compile data used in this analysis
   # get weight files
   weight_larmord_1 <- read.table("data/larmord_accuracy_nucleus.txt",col.names = c("nucleus","weight_larmord_1"))
   weight_larmord_2 <- read.table("data/larmord_accuracy_resname_nucleus.txt",col.names = c("resname","nucleus","weight_larmord_2"))
@@ -97,8 +118,45 @@ compile_data <- function(pairs, average_data=FALSE, nmr_xray=FALSE, corrected_sh
   }
 }
 
+merge_free_bound <- function(free, bound, corrected_shifts=FALSE){
+  # function to merge chemical shifts for the free vs. bound and bound vs. free analysis
+  # ensures that the comparison is carried out using a common set of chemical shifts
+  # such that the results are not sensitive to differences in the level of peak assignments in the free and bound states
+  # merge and write out common chemical shifts
+  
+  # input chemical shifts file name
+  if (corrected_shifts){
+    freefile <- paste("data/measured_shifts_corrected_clean_",free,".dat",sep = "")
+    boundfile <- paste("data/measured_shifts_corrected_clean_",bound,".dat",sep = "")
+  } else {
+    freefile <- paste("data/measured_shifts_",free,".dat",sep = "")
+    boundfile <- paste("data/measured_shifts_",bound,".dat",sep = "")
+  }
+  
+  # output chemical shifts file name
+  freefile_out <- paste("data/measured_shifts_merged_",free,".dat",sep = "")
+  boundfile_out <- paste("data/measured_shifts_merged_",bound,".dat",sep = "")
+  
+  # read in chemical shifts
+  free <- read.table(freefile, col.names=c("resname", "resid", "nucleus", "free", "expError_f"))
+  bound <- read.table(boundfile, col.names=c("resname", "resid", "nucleus", "bound", "expError_b"))  
+  
+  # merge
+  cs <- merge(free, bound, by=c("resname", "resid", "nucleus"))
+  cs$error <- 0
+  
+  # select out need frames
+  free <- cs[,c("resname", "resid", "nucleus", "free", "error")]
+  bound <- cs[,c("resname", "resid", "nucleus", "bound", "error")]
+  
+  # write out chemical shift file
+  write.table(free, file = freefile_out, quote = F, col.names = F, row.names = F)
+  write.table(bound, file = boundfile_out, quote = F, col.names = F, row.names = F)
+}
+
 
 get_cs <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 2, error_type = "rmse", conformational_averaging = FALSE){
+  # function to get chemical shift data for a pair of NMR RNA structures
   library(nmR)
   library(plyr)
   # read in shifts
@@ -150,6 +208,8 @@ get_cs <- function(pairfile, nucleus_group = "both", prediction_method = "larmor
 
 
 get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", conformational_averaging = FALSE){
+  # function to compute the resolving scores (i.e., the NSLR) for one of the test (i.e., chemical shifts in th pairfile) present in the manuscript
+  # 
   library(nmR)
   library(plyr)
   # read in shifts
@@ -237,6 +297,7 @@ get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larm
 
 
 make_error_barplot <- function(pairs=c("1R2P_2LPS","2L94_1Z2J", "2FRL_2M22","1Z2J_2L94", "2H2X_2M21","2N82_2N7X", "2KFC_2L1V", "2N7X_2N82"), nucleus_group = "both", prediction_method = "larmord", error_type = "rmse"){
+  # make barplot shown in figure 2
   figfile <- paste(paste("figures/",nucleus_group, sep=""), prediction_method, error_type, "fig.pdf", sep="_")
   pdf(file = figfile, width = 20, height = 20)
   par(lwd=3,mfrow=c(4,2),mgp=c(1.6, 0.4, 0),tcl=-0.3,oma=c(0.1,0.2,0.2,0.2))
@@ -256,6 +317,7 @@ make_error_barplot <- function(pairs=c("1R2P_2LPS","2L94_1Z2J", "2FRL_2M22","1Z2
 }
 
 generate_all_barplot <- function(){
+  # make barplots like that figure 2
   for (nucleus_group in c("proton","carbon","both")){
     for (prediction_method in c("ramsey","mean","larmord")){
       for (error_type in c("rmse","mae","tau")){
@@ -266,6 +328,7 @@ generate_all_barplot <- function(){
 }
 
 make_error_scatterplot <- function(pairs=c("2KFC_2L1V"), nucleus_group = "both", prediction_method = "mean", weight = 2, error_type = "rmse", conformational_averaging = TRUE){
+  # used to make correlation plots shown in the figure that demonstrates the use of chemical shift errors to assessed the quality of NMR structures
   figfile <- paste(paste("figures/correlation",nucleus_group, sep=""), prediction_method, error_type, "fig.pdf", sep="_")
   pdf(file = figfile, width = 5, height = 5)
   par(lwd=1,mfrow=c(2,2),mgp=c(1.6, 0.4, 0),tcl=-0.3,oma=c(0.1,0.2,0.2,0.2), pty="s",cex=0.6)
@@ -290,6 +353,7 @@ make_error_scatterplot <- function(pairs=c("2KFC_2L1V"), nucleus_group = "both",
 }
 
 make_nslr_plots <- function(m, labels=NULL, figfile="test.pdf"){
+  # using to make the box-plots shown in figure 2
   pdf(file = figfile, width = 10, height = 10)
   m <- m[1:8,]
   cols <- c("orange","blue","red")
@@ -308,6 +372,9 @@ make_nslr_plots <- function(m, labels=NULL, figfile="test.pdf"){
 }
 
 make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, weight=1, error_types=c("mae","rmse","r","tau","rho")){
+  # make summary tables 
+  # list contains: 1) NSLR -- resolving score, 2) Flags -- specifying whether the lowest error model was a reference model, 3) Lowest Errors -- error for the lowest error model in a given test
+  # the three columns correspond to the results obtained when using 1H, 13C, and both 1H and 13C
   nslrs <- NULL
   flags <- NULL
   errors <- NULL
@@ -335,40 +402,10 @@ make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=F
   return(list(nslrs, flags,errors))
 }
 
-merge_free_bound <- function(free, bound, corrected_shifts=FALSE){
-  # merge and write out common chemical shifts
-
-  # input chemical shifts file name
-  if (corrected_shifts){
-    freefile <- paste("data/measured_shifts_corrected_clean_",free,".dat",sep = "")
-    boundfile <- paste("data/measured_shifts_corrected_clean_",bound,".dat",sep = "")
-  } else {
-    freefile <- paste("data/measured_shifts_",free,".dat",sep = "")
-    boundfile <- paste("data/measured_shifts_",bound,".dat",sep = "")
-  }
-
-  # output chemical shifts file name
-  freefile_out <- paste("data/measured_shifts_merged_",free,".dat",sep = "")
-  boundfile_out <- paste("data/measured_shifts_merged_",bound,".dat",sep = "")
-  
-  # read in chemical shifts
-  free <- read.table(freefile, col.names=c("resname", "resid", "nucleus", "free", "expError_f"))
-  bound <- read.table(boundfile, col.names=c("resname", "resid", "nucleus", "bound", "expError_b"))  
-  
-  # merge
-  cs <- merge(free, bound, by=c("resname", "resid", "nucleus"))
-  cs$error <- 0
-  
-  # select out need frames
-  free <- cs[,c("resname", "resid", "nucleus", "free", "error")]
-  bound <- cs[,c("resname", "resid", "nucleus", "bound", "error")]
-  
-  # write out chemical shift file
-  write.table(free, file = freefile_out, quote = F, col.names = F, row.names = F)
-  write.table(bound, file = boundfile_out, quote = F, col.names = F, row.names = F)
-}
 
 summarize_tables <- function(predictor="larmord", error_type = "mae", averaged_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, names=c("2L94_1Z2J","1Z2J_2L94","2N82_2N7X","2N7X_2N82","1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V"), weight=1){
+  # function summarizes the results presented in the paper
+  # this is the main driver function
   nslrs <- flags <- errors <- NULL
   error_types  <- c("mae","rmse","tau","r","rho","geo_mae")
   error_type_index <- which(error_types==error_type)
@@ -441,7 +478,6 @@ create_nslr_tables <- function(predictors, averaged_data=FALSE, nmr_xray=FALSE, 
   return(matrix(m, ncol = length(predictors), byrow=F))
 }
 
-
 correlation_kendall <- function(x){
   #' Kendall Correlation Scoring Function
   #'
@@ -474,4 +510,6 @@ correlation_spearman <- function(x){
   #' score_spearman(x)
   return(data.frame(cor=cor(x$expCS,x$predCS,method="spearman"),N=nrow(x)))
 }
+
+
 
