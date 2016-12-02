@@ -1,0 +1,47 @@
+#!/bin/bash 
+if [[ $# -ne 3 ]]
+then
+	echo "usage: $0 <PDBID1> <PDBID2> <NSTEPS>"
+else
+	source ~/.bashrc
+	module load mmtsb
+	module load charmm
+	module load intel/15.x
+	export charmmTMD=/home/afrankz/local_software/repo/charmm/tool/TMD/exec/gnu/charmm
+
+	RNA1=$1
+	RNA2=$2
+	NSTEPS=$3
+	
+	# generate coordinate and psf files
+	rnas="$RNA1 $RNA2"
+	for rna in $rnas
+	do
+		id=`change_string_cases.sh ${rna}_ave_min lower`
+		genPSF.pl -par nodeoxy -cmd scratch/log_${rna} -crdout coors/${id}.cor coors/${rna}_ave_min.pdb | tee coors/${id}.psf		
+	done
+  # cleanup genPSF
+	rm -fv gollum*pdb* Saty*pdb*
+  
+  # TMD simulations 	
+	A=`change_string_cases.sh coors/${RNA1}_ave_min lower`
+	B=`change_string_cases.sh coors/${RNA2}_ave_min lower`
+	traj=`change_string_cases.sh scratch/${RNA1}_${RNA2}_trajectory.dcd lower`
+
+	crd2pdb.pl ${A}.cor > ${A}_tmd.pdb
+	crd2pdb.pl ${B}.cor > ${B}_tmd.pdb
+	
+	$charmmTMD A=$A B=$B id=scratch/${RNA1}_${RNA2} nsteps=${NSTEPS} < tmd.inp
+	
+	# Get structure info..
+	rm -rf frames/* scratch/structure_info_${RNA1}_${RNA2}.txt scratch/ramsey_${RNA1}_${RNA2}.txt scratch/larmord_${RNA1}_${RNA2}.txt			
+	traj2PDB -out frames/file -pdb ${A}_tmd.pdb ${traj} 	
+	nframes=`ls frames/* | wc -l | awk '{print $1}'`
+	frames=`seq 1 ${nframes}`
+	for i in ${frames}
+	do
+		structure_comparison ${B}_tmd.pdb frames/file.${i}.pdb ${i} | tee -a scratch/structure_info_${RNA1}_${RNA2}.txt
+		pdb2shifts frames/file.${i}.pdb ramsey ${RNA1}_${RNA2} ${i} | tee -a scratch/ramsey_${RNA1}_${RNA2}.txt
+		pdb2shifts frames/file.${i}.pdb larmord ${RNA1}_${RNA2} ${i} | tee -a scratch/larmord_${RNA1}_${RNA2}.txt			
+	done	
+fi

@@ -1,0 +1,79 @@
+* tmd simulation to generate structures between out-dated and up-dated
+* v1.1
+*
+
+dimens chsize 3000000 maxres 3000000
+
+if ?tmd .ne. 1 then
+  echo "test not performed."
+  stop
+endif
+
+!-------------------------------------------------------------------------------------
+! read topology and parameter files
+!-------------------------------------------------------------------------------------
+
+stream toppar.str
+
+!-------------------------------------------------------------------------------------
+! read reference coordinates from pdb and construct/rebuild all atoms
+!-------------------------------------------------------------------------------------
+
+open unit 10 read form name @a.cor
+read sequ coor unit 10
+generate first 5ter last 3ter n01a setup warn
+close unit 10
+auto angle dihe
+
+open unit 10 read form name @a.cor
+read coor card unit 10
+close unit 10
+
+bomlev -2
+ic param
+set tmpnic ?nic
+coor copy comp
+ic build comp
+coor copy select .not. hydrogen end
+hbuild atom cdie eps 80.0 cutnb 10.0 ctofnb 7.5 ctonnb 6.5 shift vshift bygr
+
+!-------------------------------------------------------------------------------------
+! tmd setup
+!-------------------------------------------------------------------------------------
+
+open unit 88 write card name @id_tmd.dat
+tmdinitialize itmd 88 ftmd 100 inrt 10 dincre 0.0004 frms 0.05 -
+sele all end sele all end 
+
+open read unit 2 card name @b.cor
+read coor unit 2 card targ
+close unit 2
+
+faster on
+shake bonh param tol 1.0e-8
+
+!-------------------------------------------------------------------------------------
+! dynamics
+!-------------------------------------------------------------------------------------
+
+title
+* tmd simulation. 
+*
+
+
+open write unit 13   form name @id_restart.res
+open write unit 14 unform name @id_trajectory.dcd
+
+dynamics  strt              leap                                  -
+          nstep       @nsteps   timest      0.001                     -
+          iunread      -1   iunwrite       13     isvfrq   100    -
+          firstt        0   finalt         20     tstruc    20    -
+          tconstant         tcoupling     0.1     trefer    20    -
+          ntrfrq       10   inbfrq         -1                     -
+          iprfrq       10   nprint         10                     -
+          nsavc        100   nsavv           0                     -
+          iuncrd       14   iunvel         -1                     -
+          wmin       1.50   kunit          -1     ihbfrq     0    -
+          ilbfrq        0   iasvel          1                     -
+          iseed    586101
+

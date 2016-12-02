@@ -1,0 +1,339 @@
+data_5kmz
+
+save_entry_information
+# 
+_Entry.ID                 5KMZ 
+_Entry.Assigned_BMRB_ID   30125 
+# 
+loop_
+_Audit.Revision_ID 
+_Audit.Creation_date 
+_Audit.Update_record 
+_Audit.Creation_method 
+_Audit.Entry_ID 
+1 2016-09-26 'Nomenclature checked and updated' . 5KMZ 
+2 2016-09-26 'Preliminary version'              . 5KMZ 
+3 2016-10-12 'Initial release'                  . 5KMZ 
+stop_
+save_
+save_ref_1
+# 
+_Chem_shift_reference.Sf_category    chem_shift_reference 
+_Chem_shift_reference.Sf_framecode   ref_1 
+_Chem_shift_reference.Entry_ID       5KMZ 
+_Chem_shift_reference.ID             1 
+# 
+loop_
+_Chem_shift_ref.Atom_type 
+_Chem_shift_ref.Atom_isotope_number 
+_Chem_shift_ref.Mol_common_name 
+_Chem_shift_ref.Atom_group 
+_Chem_shift_ref.Concentration_val 
+_Chem_shift_ref.Concentration_units 
+_Chem_shift_ref.Solvent 
+_Chem_shift_ref.Rank 
+_Chem_shift_ref.Chem_shift_units 
+_Chem_shift_ref.Chem_shift_val 
+_Chem_shift_ref.Ref_method 
+_Chem_shift_ref.Ref_type 
+_Chem_shift_ref.Indirect_shift_ratio 
+_Chem_shift_ref.Entry_ID 
+_Chem_shift_ref.Chem_shift_reference_ID 
+H 1 DSS protons ? ? ? ? ppm 4.78 external direct 0 30125 1 
+stop_
+save_
+save_TPK_chemical_shifts_final8
+# 
+loop_
+_Atom_chem_shift.ID 
+_Atom_chem_shift.Entity_assembly_ID 
+_Atom_chem_shift.Entity_ID 
+_Atom_chem_shift.Comp_index_ID 
+_Atom_chem_shift.Seq_ID 
+_Atom_chem_shift.Comp_ID 
+_Atom_chem_shift.Atom_ID 
+_Atom_chem_shift.Atom_type 
+_Atom_chem_shift.Atom_isotope_number 
+_Atom_chem_shift.Val 
+_Atom_chem_shift.Val_err 
+_Atom_chem_shift.Assign_fig_of_merit 
+_Atom_chem_shift.Ambiguity_code 
+_Atom_chem_shift.Occupancy 
+_Atom_chem_shift.Resonance_ID 
+_Atom_chem_shift.Auth_entity_assembly_ID 
+_Atom_chem_shift.Auth_asym_ID 
+_Atom_chem_shift.Auth_seq_ID 
+_Atom_chem_shift.Auth_comp_ID 
+_Atom_chem_shift.Auth_atom_ID 
+_Atom_chem_shift.Original_PDB_strand_ID 
+_Atom_chem_shift.Original_PDB_residue_no 
+_Atom_chem_shift.Original_PDB_residue_name 
+_Atom_chem_shift.Original_PDB_atom_name 
+_Atom_chem_shift.Details 
+_Atom_chem_shift.Entry_ID 
+_Atom_chem_shift.Assigned_chem_shift_list_ID 
+1   ? . 2  ? A H2     H ? 7.318  0.1 ? 1 ? ? . A 2  A H2     A 2  A H2     . 5KMZ ? 
+2   ? . 2  ? A H8     H ? 8.554  0.1 ? 1 ? ? . A 2  A H8     A 2  A H8     . 5KMZ ? 
+3   ? . 2  ? A "H1'"  H ? 5.982  0.1 ? 1 ? ? . A 2  A "H1'"  A 2  A "H1'"  . 5KMZ ? 
+4   ? . 2  ? A "H2'"  H ? 4.919  0.1 ? 1 ? ? . A 2  A "H2'"  A 2  A "H2'"  . 5KMZ ? 
+5   ? . 2  ? A "H3'"  H ? 4.707  0.1 ? 1 ? ? . A 2  A "H3'"  A 2  A "H3'"  . 5KMZ ? 
+6   ? . 2  ? A C2     C ? 150.7  0.1 ? 1 ? ? . A 2  A C2     A 2  A C2     . 5KMZ ? 
+7   ? . 2  ? A C8     C ? 139.1  0.1 ? 1 ? ? . A 2  A C8     A 2  A C8     . 5KMZ ? 
+8   ? . 2  ? A "C2'"  C ? 75.36  0.1 ? 1 ? ? . A 2  A "C2'"  A 2  A "C2'"  . 5KMZ ? 
+9   ? . 3  ? A H2     H ? 8.194  0.1 ? 1 ? ? . A 3  A H2     A 3  A H2     . 5KMZ ? 
+10  ? . 3  ? A H8     H ? 8.205  0.1 ? 1 ? ? . A 3  A H8     A 3  A H8     . 5KMZ ? 
+11  ? . 3  ? A "H1'"  H ? 6.163  0.1 ? 1 ? ? . A 3  A "H1'"  A 3  A "H1'"  . 5KMZ ? 
+12  ? . 3  ? A "H2'"  H ? 4.909  0.1 ? 1 ? ? . A 3  A "H2'"  A 3  A "H2'"  . 5KMZ ? 
+13  ? . 3  ? A "H3'"  H ? 4.767  0.1 ? 1 ? ? . A 3  A "H3'"  A 3  A "H3'"  . 5KMZ ? 
+14  ? . 3  ? A "H4'"  H ? 4.699  0.1 ? 1 ? ? . A 3  A "H4'"  A 3  A "H4'"  . 5KMZ ? 
+15  ? . 3  ? A C2     C ? 151.9  0.1 ? 1 ? ? . A 3  A C2     A 3  A C2     . 5KMZ ? 
+16  ? . 3  ? A C8     C ? 137.2  0.1 ? 1 ? ? . A 3  A C8     A 3  A C8     . 5KMZ ? 
+17  ? . 3  ? A "C1'"  C ? 92.56  0.1 ? 1 ? ? . A 3  A "C1'"  A 3  A "C1'"  . 5KMZ ? 
+18  ? . 3  ? A "C2'"  C ? 75.61  0.1 ? 1 ? ? . A 3  A "C2'"  A 3  A "C2'"  . 5KMZ ? 
+19  ? . 3  ? A "C3'"  C ? 72.97  0.1 ? 1 ? ? . A 3  A "C3'"  A 3  A "C3'"  . 5KMZ ? 
+20  ? . 3  ? A "C4'"  C ? 82.16  0.1 ? 1 ? ? . A 3  A "C4'"  A 3  A "C4'"  . 5KMZ ? 
+21  ? . 4  ? C H41    H ? 8.505  0.1 ? 1 ? ? . A 4  C H41    A 4  C H41    . 5KMZ ? 
+22  ? . 4  ? C H42    H ? 7.162  0.1 ? 1 ? ? . A 4  C H42    A 4  C H42    . 5KMZ ? 
+23  ? . 4  ? C H5     H ? 5.436  0.1 ? 1 ? ? . A 4  C H5     A 4  C H5     . 5KMZ ? 
+24  ? . 4  ? C H6     H ? 7.464  0.1 ? 1 ? ? . A 4  C H6     A 4  C H6     . 5KMZ ? 
+25  ? . 4  ? C "H1'"  H ? 5.585  0.1 ? 1 ? ? . A 4  C "H1'"  A 4  C "H1'"  . 5KMZ ? 
+26  ? . 4  ? C "H2'"  H ? 4.29   0.1 ? 1 ? ? . A 4  C "H2'"  A 4  C "H2'"  . 5KMZ ? 
+27  ? . 4  ? C "H3'"  H ? 4.421  0.1 ? 1 ? ? . A 4  C "H3'"  A 4  C "H3'"  . 5KMZ ? 
+28  ? . 4  ? C "H4'"  H ? 4.613  0.1 ? 1 ? ? . A 4  C "H4'"  A 4  C "H4'"  . 5KMZ ? 
+29  ? . 4  ? C C6     C ? 138.3  0.1 ? 1 ? ? . A 4  C C6     A 4  C C6     . 5KMZ ? 
+30  ? . 5  ? C H41    H ? 8.573  0.1 ? 1 ? ? . A 5  C H41    A 5  C H41    . 5KMZ ? 
+31  ? . 5  ? C H42    H ? 6.95   0.1 ? 1 ? ? . A 5  C H42    A 5  C H42    . 5KMZ ? 
+32  ? . 5  ? C H5     H ? 5.595  0.1 ? 1 ? ? . A 5  C H5     A 5  C H5     . 5KMZ ? 
+33  ? . 5  ? C H6     H ? 7.848  0.1 ? 1 ? ? . A 5  C H6     A 5  C H6     . 5KMZ ? 
+34  ? . 5  ? C "H1'"  H ? 5.584  0.1 ? 1 ? ? . A 5  C "H1'"  A 5  C "H1'"  . 5KMZ ? 
+35  ? . 5  ? C "H2'"  H ? 4.78   0.1 ? 1 ? ? . A 5  C "H2'"  A 5  C "H2'"  . 5KMZ ? 
+36  ? . 5  ? C "H3'"  H ? 4.406  0.1 ? 1 ? ? . A 5  C "H3'"  A 5  C "H3'"  . 5KMZ ? 
+37  ? . 5  ? C "H4'"  H ? 4.075  0.1 ? 1 ? ? . A 5  C "H4'"  A 5  C "H4'"  . 5KMZ ? 
+38  ? . 5  ? C C5     C ? 97.85  0.1 ? 1 ? ? . A 5  C C5     A 5  C C5     . 5KMZ ? 
+39  ? . 5  ? C C6     C ? 139.5  0.1 ? 1 ? ? . A 5  C C6     A 5  C C6     . 5KMZ ? 
+40  ? . 6  ? U H5     H ? 5.9    0.1 ? 1 ? ? . A 6  U H5     A 6  U H5     . 5KMZ ? 
+41  ? . 6  ? U H6     H ? 7.943  0.1 ? 1 ? ? . A 6  U H6     A 6  U H6     . 5KMZ ? 
+42  ? . 6  ? U "H1'"  H ? 6.094  0.1 ? 1 ? ? . A 6  U "H1'"  A 6  U "H1'"  . 5KMZ ? 
+43  ? . 7  ? U H3     H ? 13.72  0.1 ? 1 ? ? . A 7  U H3     A 7  U H3     . 5KMZ ? 
+44  ? . 7  ? U H5     H ? 5.991  0.1 ? 1 ? ? . A 7  U H5     A 7  U H5     . 5KMZ ? 
+45  ? . 7  ? U H6     H ? 7.961  0.1 ? 1 ? ? . A 7  U H6     A 7  U H6     . 5KMZ ? 
+46  ? . 7  ? U "H1'"  H ? 5.791  0.1 ? 1 ? ? . A 7  U "H1'"  A 7  U "H1'"  . 5KMZ ? 
+47  ? . 7  ? U "H2'"  H ? 3.915  0.1 ? 1 ? ? . A 7  U "H2'"  A 7  U "H2'"  . 5KMZ ? 
+48  ? . 7  ? U "H3'"  H ? 4.729  0.1 ? 1 ? ? . A 7  U "H3'"  A 7  U "H3'"  . 5KMZ ? 
+49  ? . 7  ? U "H4'"  H ? 4.644  0.1 ? 1 ? ? . A 7  U "H4'"  A 7  U "H4'"  . 5KMZ ? 
+50  ? . 7  ? U C5     C ? 105.9  0.1 ? 1 ? ? . A 7  U C5     A 7  U C5     . 5KMZ ? 
+51  ? . 7  ? U C6     C ? 142    0.1 ? 1 ? ? . A 7  U C6     A 7  U C6     . 5KMZ ? 
+52  ? . 7  ? U "C1'"  C ? 92.53  0.1 ? 1 ? ? . A 7  U "C1'"  A 7  U "C1'"  . 5KMZ ? 
+53  ? . 7  ? U "C2'"  C ? 76.71  0.1 ? 1 ? ? . A 7  U "C2'"  A 7  U "C2'"  . 5KMZ ? 
+54  ? . 8  ? C H41    H ? 6.809  0.1 ? 1 ? ? . A 8  C H41    A 8  C H41    . 5KMZ ? 
+55  ? . 8  ? C H42    H ? 5.884  0.1 ? 1 ? ? . A 8  C H42    A 8  C H42    . 5KMZ ? 
+56  ? . 8  ? C H5     H ? 5.888  0.1 ? 1 ? ? . A 8  C H5     A 8  C H5     . 5KMZ ? 
+57  ? . 8  ? C H6     H ? 7.944  0.1 ? 1 ? ? . A 8  C H6     A 8  C H6     . 5KMZ ? 
+58  ? . 8  ? C "H1'"  H ? 5.987  0.1 ? 1 ? ? . A 8  C "H1'"  A 8  C "H1'"  . 5KMZ ? 
+59  ? . 8  ? C "H2'"  H ? 4.633  0.1 ? 1 ? ? . A 8  C "H2'"  A 8  C "H2'"  . 5KMZ ? 
+60  ? . 8  ? C "H3'"  H ? 4.688  0.1 ? 1 ? ? . A 8  C "H3'"  A 8  C "H3'"  . 5KMZ ? 
+61  ? . 9  ? A H2     H ? 7.547  0.1 ? 1 ? ? . A 9  A H2     A 9  A H2     . 5KMZ ? 
+62  ? . 9  ? A H8     H ? 8.792  0.1 ? 1 ? ? . A 9  A H8     A 9  A H8     . 5KMZ ? 
+63  ? . 9  ? A "H1'"  H ? 6.14   0.1 ? 1 ? ? . A 9  A "H1'"  A 9  A "H1'"  . 5KMZ ? 
+64  ? . 9  ? A "H2'"  H ? 4.73   0.1 ? 1 ? ? . A 9  A "H2'"  A 9  A "H2'"  . 5KMZ ? 
+65  ? . 9  ? A "H3'"  H ? 4.861  0.1 ? 1 ? ? . A 9  A "H3'"  A 9  A "H3'"  . 5KMZ ? 
+66  ? . 9  ? A "H4'"  H ? 4.642  0.1 ? 1 ? ? . A 9  A "H4'"  A 9  A "H4'"  . 5KMZ ? 
+67  ? . 9  ? A C2     C ? 145.5  0.1 ? 1 ? ? . A 9  A C2     A 9  A C2     . 5KMZ ? 
+68  ? . 9  ? A C8     C ? 139.7  0.1 ? 1 ? ? . A 9  A C8     A 9  A C8     . 5KMZ ? 
+69  ? . 9  ? A "C1'"  C ? 93.54  0.1 ? 1 ? ? . A 9  A "C1'"  A 9  A "C1'"  . 5KMZ ? 
+70  ? . 9  ? A "C2'"  C ? 72.4   0.1 ? 1 ? ? . A 9  A "C2'"  A 9  A "C2'"  . 5KMZ ? 
+71  ? . 10 ? C H41    H ? 6.883  0.1 ? 1 ? ? . A 10 C H41    A 10 C H41    . 5KMZ ? 
+72  ? . 10 ? C H42    H ? 5.069  0.1 ? 1 ? ? . A 10 C H42    A 10 C H42    . 5KMZ ? 
+73  ? . 10 ? C H5     H ? 5.069  0.1 ? 1 ? ? . A 10 C H5     A 10 C H5     . 5KMZ ? 
+74  ? . 10 ? C H6     H ? 8.063  0.1 ? 1 ? ? . A 10 C H6     A 10 C H6     . 5KMZ ? 
+75  ? . 10 ? C "H1'"  H ? 5.509  0.1 ? 1 ? ? . A 10 C "H1'"  A 10 C "H1'"  . 5KMZ ? 
+76  ? . 10 ? C "H2'"  H ? 4.215  0.1 ? 1 ? ? . A 10 C "H2'"  A 10 C "H2'"  . 5KMZ ? 
+77  ? . 10 ? C "H3'"  H ? 4.624  0.1 ? 1 ? ? . A 10 C "H3'"  A 10 C "H3'"  . 5KMZ ? 
+78  ? . 10 ? C C5     C ? 97.76  0.1 ? 1 ? ? . A 10 C C5     A 10 C C5     . 5KMZ ? 
+79  ? . 10 ? C C6     C ? 139.5  0.1 ? 1 ? ? . A 10 C C6     A 10 C C6     . 5KMZ ? 
+80  ? . 11 ? C H41    H ? 6.806  0.1 ? 1 ? ? . A 11 C H41    A 11 C H41    . 5KMZ ? 
+81  ? . 11 ? C H42    H ? 5.409  0.1 ? 1 ? ? . A 11 C H42    A 11 C H42    . 5KMZ ? 
+82  ? . 11 ? C H5     H ? 5.406  0.1 ? 1 ? ? . A 11 C H5     A 11 C H5     . 5KMZ ? 
+83  ? . 11 ? C H6     H ? 7.974  0.1 ? 1 ? ? . A 11 C H6     A 11 C H6     . 5KMZ ? 
+84  ? . 11 ? C "H1'"  H ? 5.524  0.1 ? 1 ? ? . A 11 C "H1'"  A 11 C "H1'"  . 5KMZ ? 
+85  ? . 11 ? C "H2'"  H ? 4.65   0.1 ? 1 ? ? . A 11 C "H2'"  A 11 C "H2'"  . 5KMZ ? 
+86  ? . 11 ? C "H3'"  H ? 4.708  0.1 ? 1 ? ? . A 11 C "H3'"  A 11 C "H3'"  . 5KMZ ? 
+87  ? . 11 ? C "H4'"  H ? 4.495  0.1 ? 1 ? ? . A 11 C "H4'"  A 11 C "H4'"  . 5KMZ ? 
+88  ? . 11 ? C C5     C ? 97.75  0.1 ? 1 ? ? . A 11 C C5     A 11 C C5     . 5KMZ ? 
+89  ? . 11 ? C C6     C ? 138.9  0.1 ? 1 ? ? . A 11 C C6     A 11 C C6     . 5KMZ ? 
+90  ? . 12 ? A H2     H ? 6.646  0.1 ? 1 ? ? . A 12 A H2     A 12 A H2     . 5KMZ ? 
+91  ? . 12 ? A H61    H ? 7.71   0.1 ? 1 ? ? . A 12 A H61    A 12 A H61    . 5KMZ ? 
+92  ? . 12 ? A H62    H ? 6.475  0.1 ? 1 ? ? . A 12 A H62    A 12 A H62    . 5KMZ ? 
+93  ? . 12 ? A H8     H ? 8.075  0.1 ? 1 ? ? . A 12 A H8     A 12 A H8     . 5KMZ ? 
+94  ? . 12 ? A "H1'"  H ? 5.893  0.1 ? 1 ? ? . A 12 A "H1'"  A 12 A "H1'"  . 5KMZ ? 
+95  ? . 12 ? A "H2'"  H ? 4.532  0.1 ? 1 ? ? . A 12 A "H2'"  A 12 A "H2'"  . 5KMZ ? 
+96  ? . 12 ? A "H3'"  H ? 4.848  0.1 ? 1 ? ? . A 12 A "H3'"  A 12 A "H3'"  . 5KMZ ? 
+97  ? . 12 ? A "H4'"  H ? 4.634  0.1 ? 1 ? ? . A 12 A "H4'"  A 12 A "H4'"  . 5KMZ ? 
+98  ? . 12 ? A C2     C ? 149.5  0.1 ? 1 ? ? . A 12 A C2     A 12 A C2     . 5KMZ ? 
+99  ? . 12 ? A C8     C ? 137.6  0.1 ? 1 ? ? . A 12 A C8     A 12 A C8     . 5KMZ ? 
+100 ? . 12 ? A "C1'"  C ? 92.84  0.1 ? 1 ? ? . A 12 A "C1'"  A 12 A "C1'"  . 5KMZ ? 
+101 ? . 12 ? A "C2'"  C ? 76.32  0.1 ? 1 ? ? . A 12 A "C2'"  A 12 A "C2'"  . 5KMZ ? 
+102 ? . 13 ? A H2     H ? 8.299  0.1 ? 1 ? ? . A 13 A H2     A 13 A H2     . 5KMZ ? 
+103 ? . 13 ? A H61    H ? 10.85  0.1 ? 1 ? ? . A 13 A H61    A 13 A H61    . 5KMZ ? 
+104 ? . 13 ? A H62    H ? 9.53   0.1 ? 1 ? ? . A 13 A H62    A 13 A H62    . 5KMZ ? 
+105 ? . 13 ? A H8     H ? 8.379  0.1 ? 1 ? ? . A 13 A H8     A 13 A H8     . 5KMZ ? 
+106 ? . 13 ? A "H1'"  H ? 6.166  0.1 ? 1 ? ? . A 13 A "H1'"  A 13 A "H1'"  . 5KMZ ? 
+107 ? . 13 ? A "H2'"  H ? 4.714  0.1 ? 1 ? ? . A 13 A "H2'"  A 13 A "H2'"  . 5KMZ ? 
+108 ? . 13 ? A C8     C ? 138.7  0.1 ? 1 ? ? . A 13 A C8     A 13 A C8     . 5KMZ ? 
+109 ? . 14 ? U H3     H ? 14.39  0.1 ? 1 ? ? . A 14 U H3     A 14 U H3     . 5KMZ ? 
+110 ? . 14 ? U H5     H ? 5.355  0.1 ? 1 ? ? . A 14 U H5     A 14 U H5     . 5KMZ ? 
+111 ? . 14 ? U H6     H ? 7.628  0.1 ? 1 ? ? . A 14 U H6     A 14 U H6     . 5KMZ ? 
+112 ? . 14 ? U "H1'"  H ? 5.555  0.1 ? 1 ? ? . A 14 U "H1'"  A 14 U "H1'"  . 5KMZ ? 
+113 ? . 14 ? U "H2'"  H ? 4.54   0.1 ? 1 ? ? . A 14 U "H2'"  A 14 U "H2'"  . 5KMZ ? 
+114 ? . 14 ? U "H3'"  H ? 4.498  0.1 ? 1 ? ? . A 14 U "H3'"  A 14 U "H3'"  . 5KMZ ? 
+115 ? . 14 ? U C5     C ? 104.2  0.1 ? 1 ? ? . A 14 U C5     A 14 U C5     . 5KMZ ? 
+116 ? . 14 ? U C6     C ? 138.2  0.1 ? 1 ? ? . A 14 U C6     A 14 U C6     . 5KMZ ? 
+117 ? . 14 ? U "C1'"  C ? 93.54  0.1 ? 1 ? ? . A 14 U "C1'"  A 14 U "C1'"  . 5KMZ ? 
+118 ? . 14 ? U "C2'"  C ? 75.62  0.1 ? 1 ? ? . A 14 U "C2'"  A 14 U "C2'"  . 5KMZ ? 
+119 ? . 15 ? U H3     H ? 12.95  0.1 ? 1 ? ? . A 15 U H3     A 15 U H3     . 5KMZ ? 
+120 ? . 15 ? U H5     H ? 5.499  0.1 ? 1 ? ? . A 15 U H5     A 15 U H5     . 5KMZ ? 
+121 ? . 15 ? U H6     H ? 7.656  0.1 ? 1 ? ? . A 15 U H6     A 15 U H6     . 5KMZ ? 
+122 ? . 15 ? U "H1'"  H ? 5.368  0.1 ? 1 ? ? . A 15 U "H1'"  A 15 U "H1'"  . 5KMZ ? 
+123 ? . 15 ? U "H2'"  H ? 4.715  0.1 ? 1 ? ? . A 15 U "H2'"  A 15 U "H2'"  . 5KMZ ? 
+124 ? . 15 ? U "H3'"  H ? 4.383  0.1 ? 1 ? ? . A 15 U "H3'"  A 15 U "H3'"  . 5KMZ ? 
+125 ? . 15 ? U C5     C ? 104.7  0.1 ? 1 ? ? . A 15 U C5     A 15 U C5     . 5KMZ ? 
+126 ? . 15 ? U C6     C ? 138.8  0.1 ? 1 ? ? . A 15 U C6     A 15 U C6     . 5KMZ ? 
+127 ? . 15 ? U "C1'"  C ? 94.74  0.1 ? 1 ? ? . A 15 U "C1'"  A 15 U "C1'"  . 5KMZ ? 
+128 ? . 15 ? U "C2'"  C ? 75.79  0.1 ? 1 ? ? . A 15 U "C2'"  A 15 U "C2'"  . 5KMZ ? 
+129 ? . 16 ? A H2     H ? 6.247  0.1 ? 1 ? ? . A 16 A H2     A 16 A H2     . 5KMZ ? 
+130 ? . 16 ? A H8     H ? 8.012  0.1 ? 1 ? ? . A 16 A H8     A 16 A H8     . 5KMZ ? 
+131 ? . 16 ? A "H1'"  H ? 5.682  0.1 ? 1 ? ? . A 16 A "H1'"  A 16 A "H1'"  . 5KMZ ? 
+132 ? . 16 ? A "H2'"  H ? 4.609  0.1 ? 1 ? ? . A 16 A "H2'"  A 16 A "H2'"  . 5KMZ ? 
+133 ? . 16 ? A "H3'"  H ? 4.68   0.1 ? 1 ? ? . A 16 A "H3'"  A 16 A "H3'"  . 5KMZ ? 
+134 ? . 16 ? A C2     C ? 149.3  0.1 ? 1 ? ? . A 16 A C2     A 16 A C2     . 5KMZ ? 
+135 ? . 16 ? A C8     C ? 136.6  0.1 ? 1 ? ? . A 16 A C8     A 16 A C8     . 5KMZ ? 
+136 ? . 16 ? A "C1'"  C ? 93.01  0.1 ? 1 ? ? . A 16 A "C1'"  A 16 A "C1'"  . 5KMZ ? 
+137 ? . 16 ? A "C2'"  C ? 75.11  0.1 ? 1 ? ? . A 16 A "C2'"  A 16 A "C2'"  . 5KMZ ? 
+138 ? . 17 ? G H1     H ? 12.71  0.1 ? 1 ? ? . A 17 G H1     A 17 G H1     . 5KMZ ? 
+139 ? . 17 ? G H21    H ? 8.3111 0.1 ? 1 ? ? . A 17 G H21    A 17 G H21    . 5KMZ ? 
+140 ? . 17 ? G H22    H ? 6.749  0.1 ? 1 ? ? . A 17 G H22    A 17 G H22    . 5KMZ ? 
+141 ? . 17 ? G H8     H ? 7.173  0.1 ? 1 ? ? . A 17 G H8     A 17 G H8     . 5KMZ ? 
+142 ? . 17 ? G "H1'"  H ? 5.545  0.1 ? 1 ? ? . A 17 G "H1'"  A 17 G "H1'"  . 5KMZ ? 
+143 ? . 17 ? G "H2'"  H ? 4.716  0.1 ? 1 ? ? . A 17 G "H2'"  A 17 G "H2'"  . 5KMZ ? 
+144 ? . 17 ? G "H3'"  H ? 4.558  0.1 ? 1 ? ? . A 17 G "H3'"  A 17 G "H3'"  . 5KMZ ? 
+145 ? . 17 ? G "H4'"  H ? 4.495  0.1 ? 1 ? ? . A 17 G "H4'"  A 17 G "H4'"  . 5KMZ ? 
+146 ? . 17 ? G C8     C ? 133.4  0.1 ? 1 ? ? . A 17 G C8     A 17 G C8     . 5KMZ ? 
+147 ? . 18 ? G H1     H ? 13.65  0.1 ? 1 ? ? . A 18 G H1     A 18 G H1     . 5KMZ ? 
+148 ? . 18 ? G H21    H ? 9.207  0.1 ? 1 ? ? . A 18 G H21    A 18 G H21    . 5KMZ ? 
+149 ? . 18 ? G H22    H ? 6.523  0.1 ? 1 ? ? . A 18 G H22    A 18 G H22    . 5KMZ ? 
+150 ? . 18 ? G H8     H ? 7.273  0.1 ? 1 ? ? . A 18 G H8     A 18 G H8     . 5KMZ ? 
+151 ? . 18 ? G "H1'"  H ? 5.912  0.1 ? 1 ? ? . A 18 G "H1'"  A 18 G "H1'"  . 5KMZ ? 
+152 ? . 18 ? G "H2'"  H ? 4.753  0.1 ? 1 ? ? . A 18 G "H2'"  A 18 G "H2'"  . 5KMZ ? 
+153 ? . 18 ? G C8     C ? 134.2  0.1 ? 1 ? ? . A 18 G C8     A 18 G C8     . 5KMZ ? 
+154 ? . 19 ? U H3     H ? 14.94  0.1 ? 1 ? ? . A 19 U H3     A 19 U H3     . 5KMZ ? 
+155 ? . 19 ? U H5     H ? 5.152  0.1 ? 1 ? ? . A 19 U H5     A 19 U H5     . 5KMZ ? 
+156 ? . 19 ? U H6     H ? 8.21   0.1 ? 1 ? ? . A 19 U H6     A 19 U H6     . 5KMZ ? 
+157 ? . 19 ? U "H1'"  H ? 6.243  0.1 ? 1 ? ? . A 19 U "H1'"  A 19 U "H1'"  . 5KMZ ? 
+158 ? . 19 ? U "H2'"  H ? 4.508  0.1 ? 1 ? ? . A 19 U "H2'"  A 19 U "H2'"  . 5KMZ ? 
+159 ? . 19 ? U "H3'"  H ? 4.76   0.1 ? 1 ? ? . A 19 U "H3'"  A 19 U "H3'"  . 5KMZ ? 
+160 ? . 19 ? U "H4'"  H ? 3.939  0.1 ? 1 ? ? . A 19 U "H4'"  A 19 U "H4'"  . 5KMZ ? 
+161 ? . 19 ? U "H5'"  H ? 4.825  0.1 ? 1 ? ? . A 19 U "H5'"  A 19 U "H5'"  . 5KMZ ? 
+162 ? . 19 ? U "H5''" H ? 4.035  0.1 ? 1 ? ? . A 19 U "H5''" A 19 U "H5''" . 5KMZ ? 
+163 ? . 19 ? U C6     C ? 140.7  0.1 ? 1 ? ? . A 19 U C6     A 19 U C6     . 5KMZ ? 
+164 ? . 19 ? U "C1'"  C ? 89.43  0.1 ? 1 ? ? . A 19 U "C1'"  A 19 U "C1'"  . 5KMZ ? 
+165 ? . 19 ? U "C2'"  C ? 76.13  0.1 ? 1 ? ? . A 19 U "C2'"  A 19 U "C2'"  . 5KMZ ? 
+166 ? . 19 ? U "C3'"  C ? 80.48  0.1 ? 1 ? ? . A 19 U "C3'"  A 19 U "C3'"  . 5KMZ ? 
+167 ? . 19 ? U "C4'"  C ? 86.19  0.1 ? 1 ? ? . A 19 U "C4'"  A 19 U "C4'"  . 5KMZ ? 
+168 ? . 19 ? U "C5'"  C ? 67.37  0.1 ? 1 ? ? . A 19 U "C5'"  A 19 U "C5'"  . 5KMZ ? 
+169 ? . 20 ? U H5     H ? 5.896  0.1 ? 1 ? ? . A 20 U H5     A 20 U H5     . 5KMZ ? 
+170 ? . 20 ? U H6     H ? 8.264  0.1 ? 1 ? ? . A 20 U H6     A 20 U H6     . 5KMZ ? 
+171 ? . 20 ? U "H1'"  H ? 6.589  0.1 ? 1 ? ? . A 20 U "H1'"  A 20 U "H1'"  . 5KMZ ? 
+172 ? . 20 ? U "H2'"  H ? 4.807  0.1 ? 1 ? ? . A 20 U "H2'"  A 20 U "H2'"  . 5KMZ ? 
+173 ? . 20 ? U "H3'"  H ? 4.72   0.1 ? 1 ? ? . A 20 U "H3'"  A 20 U "H3'"  . 5KMZ ? 
+174 ? . 20 ? U "H4'"  H ? 4.648  0.1 ? 1 ? ? . A 20 U "H4'"  A 20 U "H4'"  . 5KMZ ? 
+175 ? . 20 ? U C5     C ? 104.8  0.1 ? 1 ? ? . A 20 U C5     A 20 U C5     . 5KMZ ? 
+176 ? . 20 ? U C6     C ? 142.4  0.1 ? 1 ? ? . A 20 U C6     A 20 U C6     . 5KMZ ? 
+177 ? . 20 ? U "C1'"  C ? 94.89  0.1 ? 1 ? ? . A 20 U "C1'"  A 20 U "C1'"  . 5KMZ ? 
+178 ? . 20 ? U "C2'"  C ? 74.47  0.1 ? 1 ? ? . A 20 U "C2'"  A 20 U "C2'"  . 5KMZ ? 
+179 ? . 20 ? U "C3'"  C ? 72.42  0.1 ? 1 ? ? . A 20 U "C3'"  A 20 U "C3'"  . 5KMZ ? 
+180 ? . 20 ? U "C4'"  C ? 82.73  0.1 ? 1 ? ? . A 20 U "C4'"  A 20 U "C4'"  . 5KMZ ? 
+181 ? . 21 ? C H5     H ? 6.415  0.1 ? 1 ? ? . A 21 C H5     A 21 C H5     . 5KMZ ? 
+182 ? . 21 ? C H6     H ? 7.671  0.1 ? 1 ? ? . A 21 C H6     A 21 C H6     . 5KMZ ? 
+183 ? . 21 ? C "H1'"  H ? 5.929  0.1 ? 1 ? ? . A 21 C "H1'"  A 21 C "H1'"  . 5KMZ ? 
+184 ? . 21 ? C C5     C ? 100.5  0.1 ? 1 ? ? . A 21 C C5     A 21 C C5     . 5KMZ ? 
+185 ? . 21 ? C C6     C ? 141.3  0.1 ? 1 ? ? . A 21 C C6     A 21 C C6     . 5KMZ ? 
+186 ? . 22 ? A H2     H ? 8.01   0.1 ? 1 ? ? . A 22 A H2     A 22 A H2     . 5KMZ ? 
+187 ? . 22 ? A H8     H ? 7.772  0.1 ? 1 ? ? . A 22 A H8     A 22 A H8     . 5KMZ ? 
+188 ? . 22 ? A "H1'"  H ? 5.939  0.1 ? 1 ? ? . A 22 A "H1'"  A 22 A "H1'"  . 5KMZ ? 
+189 ? . 22 ? A C2     C ? 153.9  0.1 ? 1 ? ? . A 22 A C2     A 22 A C2     . 5KMZ ? 
+190 ? . 23 ? A H2     H ? 8.355  0.1 ? 1 ? ? . A 23 A H2     A 23 A H2     . 5KMZ ? 
+191 ? . 23 ? A H8     H ? 8.34   0.1 ? 1 ? ? . A 23 A H8     A 23 A H8     . 5KMZ ? 
+192 ? . 23 ? A "H1'"  H ? 5.762  0.1 ? 1 ? ? . A 23 A "H1'"  A 23 A "H1'"  . 5KMZ ? 
+193 ? . 23 ? A C8     C ? 139    0.1 ? 1 ? ? . A 23 A C8     A 23 A C8     . 5KMZ ? 
+194 ? . 24 ? A H2     H ? 8.208  0.1 ? 1 ? ? . A 24 A H2     A 24 A H2     . 5KMZ ? 
+195 ? . 24 ? A H8     H ? 8.352  0.1 ? 1 ? ? . A 24 A H8     A 24 A H8     . 5KMZ ? 
+196 ? . 24 ? A C2     C ? 153    0.1 ? 1 ? ? . A 24 A C2     A 24 A C2     . 5KMZ ? 
+197 ? . 24 ? A C8     C ? 140    0.1 ? 1 ? ? . A 24 A C8     A 24 A C8     . 5KMZ ? 
+198 ? . 25 ? U H3     H ? 13.29  0.1 ? 1 ? ? . A 25 U H3     A 25 U H3     . 5KMZ ? 
+199 ? . 25 ? U H5     H ? 5.325  0.1 ? 1 ? ? . A 25 U H5     A 25 U H5     . 5KMZ ? 
+200 ? . 25 ? U H6     H ? 7.931  0.1 ? 1 ? ? . A 25 U H6     A 25 U H6     . 5KMZ ? 
+201 ? . 25 ? U "H1'"  H ? 5.35   0.1 ? 1 ? ? . A 25 U "H1'"  A 25 U "H1'"  . 5KMZ ? 
+202 ? . 25 ? U "H2'"  H ? 4.101  0.1 ? 1 ? ? . A 25 U "H2'"  A 25 U "H2'"  . 5KMZ ? 
+203 ? . 25 ? U "H3'"  H ? 4.883  0.1 ? 1 ? ? . A 25 U "H3'"  A 25 U "H3'"  . 5KMZ ? 
+204 ? . 25 ? U C5     C ? 102.9  0.1 ? 1 ? ? . A 25 U C5     A 25 U C5     . 5KMZ ? 
+205 ? . 25 ? U "C1'"  C ? 93.56  0.1 ? 1 ? ? . A 25 U "C1'"  A 25 U "C1'"  . 5KMZ ? 
+206 ? . 25 ? U "C2'"  C ? 76.35  0.1 ? 1 ? ? . A 25 U "C2'"  A 25 U "C2'"  . 5KMZ ? 
+207 ? . 26 ? A H2     H ? 6.444  0.1 ? 1 ? ? . A 26 A H2     A 26 A H2     . 5KMZ ? 
+208 ? . 26 ? A H61    H ? 7.226  0.1 ? 1 ? ? . A 26 A H61    A 26 A H61    . 5KMZ ? 
+209 ? . 26 ? A H62    H ? 6.625  0.1 ? 1 ? ? . A 26 A H62    A 26 A H62    . 5KMZ ? 
+210 ? . 26 ? A H8     H ? 7.683  0.1 ? 1 ? ? . A 26 A H8     A 26 A H8     . 5KMZ ? 
+211 ? . 26 ? A "H1'"  H ? 5.987  0.1 ? 1 ? ? . A 26 A "H1'"  A 26 A "H1'"  . 5KMZ ? 
+212 ? . 26 ? A "H2'"  H ? 4.817  0.1 ? 1 ? ? . A 26 A "H2'"  A 26 A "H2'"  . 5KMZ ? 
+213 ? . 26 ? A C2     C ? 149.3  0.1 ? 1 ? ? . A 26 A C2     A 26 A C2     . 5KMZ ? 
+214 ? . 26 ? A C8     C ? 137.5  0.1 ? 1 ? ? . A 26 A C8     A 26 A C8     . 5KMZ ? 
+215 ? . 26 ? A "C1'"  C ? 95.63  0.1 ? 1 ? ? . A 26 A "C1'"  A 26 A "C1'"  . 5KMZ ? 
+216 ? . 27 ? A H2     H ? 7.574  0.1 ? 1 ? ? . A 27 A H2     A 27 A H2     . 5KMZ ? 
+217 ? . 27 ? A H61    H ? 7.646  0.1 ? 1 ? ? . A 27 A H61    A 27 A H61    . 5KMZ ? 
+218 ? . 27 ? A H62    H ? 7.286  0.1 ? 1 ? ? . A 27 A H62    A 27 A H62    . 5KMZ ? 
+219 ? . 27 ? A H8     H ? 7.849  0.1 ? 1 ? ? . A 27 A H8     A 27 A H8     . 5KMZ ? 
+220 ? . 27 ? A "H1'"  H ? 6.129  0.1 ? 1 ? ? . A 27 A "H1'"  A 27 A "H1'"  . 5KMZ ? 
+221 ? . 27 ? A "H2'"  H ? 5.187  0.1 ? 1 ? ? . A 27 A "H2'"  A 27 A "H2'"  . 5KMZ ? 
+222 ? . 27 ? A "H3'"  H ? 4.744  0.1 ? 1 ? ? . A 27 A "H3'"  A 27 A "H3'"  . 5KMZ ? 
+223 ? . 27 ? A "H4'"  H ? 4.525  0.1 ? 1 ? ? . A 27 A "H4'"  A 27 A "H4'"  . 5KMZ ? 
+224 ? . 27 ? A C2     C ? 151.3  0.1 ? 1 ? ? . A 27 A C2     A 27 A C2     . 5KMZ ? 
+225 ? . 27 ? A C8     C ? 138.4  0.1 ? 1 ? ? . A 27 A C8     A 27 A C8     . 5KMZ ? 
+226 ? . 27 ? A "C1'"  C ? 93.92  0.1 ? 1 ? ? . A 27 A "C1'"  A 27 A "C1'"  . 5KMZ ? 
+227 ? . 27 ? A "C2'"  C ? 77.51  0.1 ? 1 ? ? . A 27 A "C2'"  A 27 A "C2'"  . 5KMZ ? 
+228 ? . 28 ? G H1     H ? 13.55  0.1 ? 1 ? ? . A 28 G H1     A 28 G H1     . 5KMZ ? 
+229 ? . 28 ? G H8     H ? 8.025  0.1 ? 1 ? ? . A 28 G H8     A 28 G H8     . 5KMZ ? 
+230 ? . 28 ? G "H1'"  H ? 6.308  0.1 ? 1 ? ? . A 28 G "H1'"  A 28 G "H1'"  . 5KMZ ? 
+231 ? . 28 ? G "H2'"  H ? 4.835  0.1 ? 1 ? ? . A 28 G "H2'"  A 28 G "H2'"  . 5KMZ ? 
+232 ? . 28 ? G "H3'"  H ? 4.482  0.1 ? 1 ? ? . A 28 G "H3'"  A 28 G "H3'"  . 5KMZ ? 
+233 ? . 28 ? G "H4'"  H ? 4.787  0.1 ? 1 ? ? . A 28 G "H4'"  A 28 G "H4'"  . 5KMZ ? 
+234 ? . 28 ? G "H5'"  H ? 5.272  0.1 ? 1 ? ? . A 28 G "H5'"  A 28 G "H5'"  . 5KMZ ? 
+235 ? . 28 ? G C8     C ? 137.4  0.1 ? 1 ? ? . A 28 G C8     A 28 G C8     . 5KMZ ? 
+236 ? . 29 ? U H3     H ? 13.23  0.1 ? 1 ? ? . A 29 U H3     A 29 U H3     . 5KMZ ? 
+237 ? . 29 ? U H5     H ? 5.211  0.1 ? 1 ? ? . A 29 U H5     A 29 U H5     . 5KMZ ? 
+238 ? . 29 ? U H6     H ? 8.137  0.1 ? 1 ? ? . A 29 U H6     A 29 U H6     . 5KMZ ? 
+239 ? . 29 ? U "H1'"  H ? 5.859  0.1 ? 1 ? ? . A 29 U "H1'"  A 29 U "H1'"  . 5KMZ ? 
+240 ? . 29 ? U "H2'"  H ? 4.588  0.1 ? 1 ? ? . A 29 U "H2'"  A 29 U "H2'"  . 5KMZ ? 
+241 ? . 29 ? U "H3'"  H ? 4.771  0.1 ? 1 ? ? . A 29 U "H3'"  A 29 U "H3'"  . 5KMZ ? 
+242 ? . 29 ? U C5     C ? 103.5  0.1 ? 1 ? ? . A 29 U C5     A 29 U C5     . 5KMZ ? 
+243 ? . 29 ? U C6     C ? 139.3  0.1 ? 1 ? ? . A 29 U C6     A 29 U C6     . 5KMZ ? 
+244 ? . 29 ? U "C1'"  C ? 93.12  0.1 ? 1 ? ? . A 29 U "C1'"  A 29 U "C1'"  . 5KMZ ? 
+245 ? . 29 ? U "C2'"  C ? 72.38  0.1 ? 1 ? ? . A 29 U "C2'"  A 29 U "C2'"  . 5KMZ ? 
+246 ? . 30 ? G H1     H ? 12.2   0.1 ? 1 ? ? . A 30 G H1     A 30 G H1     . 5KMZ ? 
+247 ? . 30 ? G H8     H ? 7.857  0.1 ? 1 ? ? . A 30 G H8     A 30 G H8     . 5KMZ ? 
+248 ? . 30 ? G "H1'"  H ? 5.881  0.1 ? 1 ? ? . A 30 G "H1'"  A 30 G "H1'"  . 5KMZ ? 
+249 ? . 30 ? G "H2'"  H ? 4.769  0.1 ? 1 ? ? . A 30 G "H2'"  A 30 G "H2'"  . 5KMZ ? 
+250 ? . 30 ? G "H4'"  H ? 4.588  0.1 ? 1 ? ? . A 30 G "H4'"  A 30 G "H4'"  . 5KMZ ? 
+251 ? . 30 ? G C8     C ? 134.4  0.1 ? 1 ? ? . A 30 G C8     A 30 G C8     . 5KMZ ? 
+252 ? . 31 ? G H1     H ? 13.4   0.1 ? 1 ? ? . A 31 G H1     A 31 G H1     . 5KMZ ? 
+253 ? . 31 ? G H8     H ? 7.219  0.1 ? 1 ? ? . A 31 G H8     A 31 G H8     . 5KMZ ? 
+254 ? . 31 ? G "H1'"  H ? 5.665  0.1 ? 1 ? ? . A 31 G "H1'"  A 31 G "H1'"  . 5KMZ ? 
+255 ? . 31 ? G "H2'"  H ? 4.479  0.1 ? 1 ? ? . A 31 G "H2'"  A 31 G "H2'"  . 5KMZ ? 
+256 ? . 31 ? G "H3'"  H ? 4.522  0.1 ? 1 ? ? . A 31 G "H3'"  A 31 G "H3'"  . 5KMZ ? 
+257 ? . 31 ? G C8     C ? 133.5  0.1 ? 1 ? ? . A 31 G C8     A 31 G C8     . 5KMZ ? 
+258 ? . 32 ? U H5     H ? 5.209  0.1 ? 1 ? ? . A 32 U H5     A 32 U H5     . 5KMZ ? 
+259 ? . 32 ? U H6     H ? 7.734  0.1 ? 1 ? ? . A 32 U H6     A 32 U H6     . 5KMZ ? 
+260 ? . 32 ? U "H1'"  H ? 5.541  0.1 ? 1 ? ? . A 32 U "H1'"  A 32 U "H1'"  . 5KMZ ? 
+261 ? . 32 ? U "H2'"  H ? 4.661  0.1 ? 1 ? ? . A 32 U "H2'"  A 32 U "H2'"  . 5KMZ ? 
+262 ? . 32 ? U C5     C ? 103.7  0.1 ? 1 ? ? . A 32 U C5     A 32 U C5     . 5KMZ ? 
+263 ? . 32 ? U C6     C ? 138.7  0.1 ? 1 ? ? . A 32 U C6     A 32 U C6     . 5KMZ ? 
+stop_
+save_

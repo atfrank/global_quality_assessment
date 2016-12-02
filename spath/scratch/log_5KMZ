@@ -1,0 +1,32 @@
+open unit 10 read form name "/export/apps/MMTSB/data/toppar/top_all27_prot_na.rtf"
+read rtf card unit 10
+close unit 10
+open unit 10 read form name "/export/apps/MMTSB/data/toppar/par_all27_prot_na.prm"
+read para card unit 10 
+close unit 10
+faster on
+open unit 10 read form name "Satyr-pdb12226-N01A"
+read sequ pdb unit 10
+generate first 5TER last 3TER N01A setup warn
+close unit 10
+auto angle dihe
+auto angle dihe
+open unit 10 read form name "Satyr-pdb12226-N01A"
+read coor pdb unit 10 resi
+close unit 10
+bomlev -2
+ic param
+set tmpNIC ?NIC
+coor copy comp
+ic build comp
+coor copy select .not. hydrogen end
+hbuild atom cdie eps 80.0 cutnb 10.0 ctofnb 7.5 ctonnb 6.5 shift vshift bygr
+open unit 10 write form name "12226.psf"
+write psf card unit 10
+*
+close unit 10
+open unit 10 write form name "coors/5kmz_ave_min.cor"
+write coor card unit 10
+*
+close unit 10
+stop
