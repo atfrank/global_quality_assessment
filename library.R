@@ -214,7 +214,7 @@ get_cs <- function(pairfile, nucleus_group = "both", prediction_method = "larmor
   return(cs)
 }
 
-get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", conformational_averaging = FALSE, outliers =FALSE){
+get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", conformational_averaging = FALSE, outliers = NULL){
   # function to compute the resolving scores (i.e., the NSLR) for one of the test (i.e., chemical shifts in th pairfile) present in the manuscript
   # 
   library(nmR)
@@ -310,7 +310,7 @@ get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larm
   }
   
   # remove outliers
-  if(outliers){cs <- remove_outliers(cs)}
+  if(!is.null(outliers)){cs <- remove_outliers(cs, outliers)}
 
   if (error_type=="rmse"){
     errors <- ddply(.dat=cs, .var=c("model","reference_flag"), .fun=score_rmse)
@@ -446,7 +446,7 @@ make_nslr_plots <- function(m, labels=NULL, figfile="test.pdf"){
   dev.off()
 }
 
-make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, weight=1, error_types=c("mae","rmse","r","tau","rho"), outliers = FALSE){
+make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, weight=1, error_types=c("mae","rmse","r","tau","rho"), outliers = NULL){
   # make summary tables 
   # list contains: 1) NSLR -- resolving score, 2) Flags -- specifying whether the lowest error model was a reference model, 3) Lowest Errors -- error for the lowest error model in a given test
   # the three columns correspond to the results obtained when using 1H, 13C, and both 1H and 13C
@@ -477,7 +477,7 @@ make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=F
   return(list(nslrs, flags,errors))
 }
 
-summarize_tables <- function(predictor="larmord", error_type = "mae", averaged_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, names=c("2L94_1Z2J","1Z2J_2L94","2N82_2N7X","2N7X_2N82","1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V"), weight=1, outliers = FALSE){
+summarize_tables <- function(predictor="larmord", error_type = "mae", averaged_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, names=c("2L94_1Z2J","1Z2J_2L94","2N82_2N7X","2N7X_2N82","1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V"), weight=1, outliers = NULL){
   # function summarizes the results presented in the paper
   # this is the main driver function
   nslrs <- flags <- errors <- NULL
@@ -748,7 +748,7 @@ get_nucleus_errors <- function(pairfile, nucleus_group = "both", prediction_meth
   return(mat)
 }
 
-make_table_errors_nucleus <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), predictor="larmord", weight=1, error_type="mae", outliers = FALSE){
+make_table_errors_nucleus <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), predictor="larmord", weight=1, error_type="mae", outliers = NULL){
   # make summary tables of errors 
   for (i in seq_along(pairs)){
     pair <- pairs[i]
