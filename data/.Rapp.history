@@ -1,0 +1,3 @@
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/data/workspace_wt_4_correct_TRUE.RData")
+ls()
+sm_all_mean

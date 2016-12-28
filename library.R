@@ -1,30 +1,32 @@
-initialize_analysis <- function(pairs, workdir="~/GitSoftware/global_quality_assessment/"){
+initialize_analysis <- function(pairs, correct_shifts=FALSE, workdir="~/GitSoftware/global_quality_assessment/"){
   # initialize data and variables need for analysis
   # goto analysis directory
   setwd(workdir)
   
   # data for composite NMR bundle
-  compile_data(pairs, FALSE, FALSE)
+  compile_data(pairs, FALSE, FALSE, correct_shifts)
   
   # data for average structure
-  compile_data(pairs, TRUE, FALSE)
+  compile_data(pairs, TRUE, FALSE, correct_shifts)
   
   # data for nmr-xray pairs
-  compile_data(pairs, FALSE, TRUE)
-  
-  # merge free and bound chemical shifts to ensure we only use common chemical shifts
-  merge_free_bound("2N7X", "2N82")
-  merge_free_bound("1Z2J", "2L94")
-
+  compile_data(pairs, FALSE, TRUE, correct_shifts)
 }
 
-compile_data <- function(pairs, average_data=FALSE, nmr_xray=FALSE, corrected_shifts = FALSE){
+compile_data <- function(pairs, average_data=FALSE, nmr_xray=FALSE, corrected_shifts = FALSE, sensivities_flag=TRUE){
   # function to compile data used in this analysis
   # get weight files
   weight_larmord_1 <- read.table("data/larmord_accuracy_nucleus.txt",col.names = c("nucleus","weight_larmord_1"))
   weight_larmord_2 <- read.table("data/larmord_accuracy_resname_nucleus.txt",col.names = c("resname","nucleus","weight_larmord_2"))
   weight_ramsey_1 <- read.table("data/ramsey_accuracy_nucleus.txt",col.names = c("nucleus","weight_ramsey_1"))
   weight_ramsey_2 <- read.table("data/ramsey_accuracy_resname_nucleus.txt",col.names = c("resname","nucleus","weight_ramsey_2"))
+  
+  if (sensivities_flag){
+    assign("sensivities",get(load("data/mean_sensivities.RData")))
+    sensivities[,2] <- sensivities[,2]/max(sensivities[,2])
+    sensivities[,3] <- sensivities[,3]/max(sensivities[,3])
+    sensivities[,4] <- sensivities[,4]/max(sensivities[,4])
+  }
   
   for (i in seq_along(pairs$pair)){
     pair <- pairs$pair[i]
@@ -54,7 +56,8 @@ compile_data <- function(pairs, average_data=FALSE, nmr_xray=FALSE, corrected_sh
       measured_file <- paste("data/measured_shifts_merged_",ref,".dat",sep = "")
     } else {
       if (corrected_shifts){
-        measured_file <- paste("data/measured_shifts_corrected_clean_",ref,".dat",sep = "")
+        measured_file <- paste("reference_errors/",ref,"/chemical_shifts_corrected_larmord.txt",sep = "")
+        
       } else {
         measured_file <- paste("data/measured_shifts_",ref,".dat",sep = "")
       }
@@ -111,6 +114,12 @@ compile_data <- function(pairs, average_data=FALSE, nmr_xray=FALSE, corrected_sh
       cs <- merge(cs, weight_ramsey_1)
       cs <- merge(cs, weight_ramsey_2)
       
+      # add sensivities
+      if (sensivities_flag){
+        colnames(sensivities) <- c("nucleus", "sensi_mean", "sensi_ramsey", "sensi_larmord")
+        cs <- merge(cs, sensivities, by = c("nucleus"))
+      }
+      
       # write out file
       write.table(cs, file=outfile, quote = F, col.names = T, row.names = F)
       cat(sprintf("done with %s\n", pair))
@@ -153,7 +162,6 @@ merge_free_bound <- function(free, bound, corrected_shifts=FALSE){
   write.table(free, file = freefile_out, quote = F, col.names = F, row.names = F)
   write.table(bound, file = boundfile_out, quote = F, col.names = F, row.names = F)
 }
-
 
 get_cs <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 2, error_type = "rmse", conformational_averaging = FALSE){
   # function to get chemical shift data for a pair of NMR RNA structures
@@ -206,8 +214,7 @@ get_cs <- function(pairfile, nucleus_group = "both", prediction_method = "larmor
   return(cs)
 }
 
-
-get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", conformational_averaging = FALSE){
+get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", conformational_averaging = FALSE, outliers =FALSE){
   # function to compute the resolving scores (i.e., the NSLR) for one of the test (i.e., chemical shifts in th pairfile) present in the manuscript
   # 
   library(nmR)
@@ -228,26 +235,71 @@ get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larm
     cs$predCS <- cs$larmord_predCS
     if (weight==1){
       cs$weight <- 1/cs$weight_larmord_1
-    } else{
-      cs$weight <- 1/cs$weight_larmord_2
+    } 
+    if (weight==2){
+      cs$weight <- 1/cs$weight_larmord_1
+    } 
+    if (c("sensi_larmord") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_larmord)*cs$weight_larmord_1
+      } 
+      if (weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_larmord)*cs$weight_larmord_2
+      } 
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_larmord)/cs$weight_larmord_1
+      } 
+      if (weight==6){
+        cs$weight <- sqrt(cs$sensi_larmord)/cs$weight_larmord_2
+      } 
+      
     }
   }
-
   if (prediction_method=="ramsey"){
     cs$predCS <- cs$ramsey_predCS
     if (weight==1){
       cs$weight <- 1/cs$weight_ramsey_1
-    } else{
-      cs$weight <- 1/cs$weight_ramsey_2
+    } 
+    if (weight==2){
+      cs$weight <- 1/cs$weight_ramsey_1
+    } 
+    if (c("sensi_ramsey") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_ramsey)*cs$weight_ramsey_1
+      } 
+      if (weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_ramsey)*cs$weight_ramsey_2
+      } 
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_ramsey)/cs$weight_ramsey_1
+      } 
+      if (weight==6){
+        cs$weight <- sqrt(cs$sensi_ramsey)/cs$weight_ramsey_2
+      } 
+      
     }
   }
-
   if (prediction_method=="mean"){
     cs$predCS <- (cs$ramsey_predCS + cs$larmord_predCS)/2
     if (weight==1){
       cs$weight <- 1/((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
-    } else{
+    } 
+    if(weight==2){
       cs$weight <- 1/((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+    }
+    if (c("sensi_mean") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_mean)*((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+      } 
+      if(weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_mean)*((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+      }
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_mean)/((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+      } 
+      if(weight==6){
+        cs$weight <- sqrt(cs$sensi_mean)/((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+      }
     }
   }
 
@@ -256,6 +308,9 @@ get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larm
     cs$model <- cs$reference_flag
     cs$predCS <- cs$V1
   }
+  
+  # remove outliers
+  if(outliers){cs <- remove_outliers(cs)}
 
   if (error_type=="rmse"){
     errors <- ddply(.dat=cs, .var=c("model","reference_flag"), .fun=score_rmse)
@@ -295,8 +350,19 @@ get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larm
   return(data.frame(nslr=nslr(errors$flag),flag=errors$flag[1], error=errors$error[1]))
 }
 
+remove_outliers <- function(cs, threshold=5.0){
+  diff <- ddply(.data = cs, .variables = c("resid", "nucleus"), .fun = function(x){data.frame(diff=mean(x$weight*abs(x$expCS-x$predCS)))})
+  outliers <- subset(diff, diff>threshold)
+  outliers$tag <- paste(outliers$resid, outliers$nucleus, sep = ":")
+  cs$tag <- paste(cs$resid, cs$nucleus, sep = ":")
+  if (nrow(outliers)!=0){
+    #print(outliers)
+    cs <- cs[ !(cs$tag %in% outliers$tag), ]
+  }
+  return(cs)
+}
 
-make_error_barplot <- function(pairs=c("1R2P_2LPS","2L94_1Z2J", "2FRL_2M22","1Z2J_2L94", "2H2X_2M21","2N82_2N7X", "2KFC_2L1V", "2N7X_2N82"), nucleus_group = "both", prediction_method = "larmord", error_type = "rmse"){
+make_error_barplot <- function(pairs=c("1R2P_2LPS", "2FRL_2M22", "2H2X_2M21", "2KFC_2L1V", "2N6Q_5KMZ"), nucleus_group = "both", prediction_method = "larmord", error_type = "rmse"){
   # make barplot shown in figure 2
   figfile <- paste(paste("figures/",nucleus_group, sep=""), prediction_method, error_type, "fig.pdf", sep="_")
   pdf(file = figfile, width = 20, height = 20)
@@ -312,6 +378,17 @@ make_error_barplot <- function(pairs=c("1R2P_2LPS","2L94_1Z2J", "2FRL_2M22","1Z2
     border_cols <- rep("black",nrow(errors))
     border_cols[which.min(errors$error)] <- "red"
     barplot(errors$error, col = cols, names.arg=errors$model, xlim=c(1,50),border = border_cols, lwd="2", las=2, cex.names = 2.1, cex.axis = 2.1)
+    # add segment
+    n <- length(errors$error)
+    a <- sum(errors$flag==0)
+    b <- a + 1
+    x0s <- c(0, b+2)
+    x1s <- c(a+2, n+2)
+    # these are the y-coordinates for the horizontal lines
+    # that you need to set to the desired values.
+    y0s <- c(mean(errors$error[errors$flag==0]), mean(errors$error[errors$flag==1]))
+    # add segments
+    segments(x0 = x0s, x1 = x1s, y0 = y0s, col = "cyan", lwd="3")
   }
   dev.off()
 }
@@ -320,7 +397,7 @@ generate_all_barplot <- function(){
   # make barplots like that figure 2
   for (nucleus_group in c("proton","carbon","both")){
     for (prediction_method in c("ramsey","mean","larmord")){
-      for (error_type in c("rmse","mae","tau")){
+      for (error_type in c("mae")){
         make_error_barplot(nucleus_group = nucleus_group, prediction_method = prediction_method, error_type = error_type)
       }
     }
@@ -335,7 +412,6 @@ make_error_scatterplot <- function(pairs=c("2KFC_2L1V"), nucleus_group = "both",
   for (pair in pairs){
     pairfile <- paste("data/chemical_shifts_",pair,".txt",sep="")
     cs <- get_cs(pairfile, nucleus_group, prediction_method, weight, error_type, conformational_averaging)
-    print(head(cs$type))
     protons <- cs$type=="proton"&cs$reference_flag=="0"
     carbons <- cs$type=="carbon"&cs$reference_flag=="0"
     plot(cs$expCS[protons], cs$predCS[protons],xlab = "obs. chemical shifts (ppm)", ylab = "comp. chemical shifts(ppm)", pch=21, bg = "orange")
@@ -355,12 +431,11 @@ make_error_scatterplot <- function(pairs=c("2KFC_2L1V"), nucleus_group = "both",
 make_nslr_plots <- function(m, labels=NULL, figfile="test.pdf"){
   # using to make the box-plots shown in figure 2
   pdf(file = figfile, width = 10, height = 10)
-  m <- m[1:8,]
+  m <- m[1:5,]
   cols <- c("orange","blue","red")
-  data <- data.frame(nslr=c(m[1:8,1],m[1:8,2],m[1:8,3]))
-  data$label <- as.factor(c(rep("A",8),rep("B",8),rep("C",8)))
+  data <- data.frame(nslr=c(m[1:5,1],m[1:5,2],m[1:5,3]))
+  data$label <- as.factor(c(rep("A",5),rep("B",5),rep("C",5)))
   par(lwd=3,mfrow=c(2,2),mgp=c(1.6, 0.4, 0),tcl=-0.3,oma=c(0.1,0.2,0.2,0.2),cex=1.5)
-  print(as.matrix(m))
   barplot(t(as.matrix(m)), beside = TRUE, col = cols, las=2, ylim=c(0,1),  names.arg=labels)
   abline(h=random_nslr(20,40),lwd="2",lty="dashed")
   abline(h=mean(as.matrix(m)[,1]),lwd="2",lty="dashed",col=cols[1])
@@ -371,7 +446,7 @@ make_nslr_plots <- function(m, labels=NULL, figfile="test.pdf"){
   dev.off()
 }
 
-make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, weight=1, error_types=c("mae","rmse","r","tau","rho")){
+make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, weight=1, error_types=c("mae","rmse","r","tau","rho"), outliers = FALSE){
   # make summary tables 
   # list contains: 1) NSLR -- resolving score, 2) Flags -- specifying whether the lowest error model was a reference model, 3) Lowest Errors -- error for the lowest error model in a given test
   # the three columns correspond to the results obtained when using 1H, 13C, and both 1H and 13C
@@ -390,7 +465,7 @@ make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=F
       if(!average_data && !nmr_xray) {
         file <- paste("chemical_shifts_",pair,".txt",sep="")
       }
-      out <- get_slrs(file, error_type = error_type, weight = weight, nucleus_group = nucleus_group, prediction_method = predictor, conformational_averaging=conformational_averaging)
+      out <- get_slrs(file, error_type = error_type, weight = weight, nucleus_group = nucleus_group, prediction_method = predictor, conformational_averaging=conformational_averaging, outliers = outliers)
       nslrs <- c(nslrs, out$nslr)
       flags <- c(flags, out$flag)
       errors <- c(errors, out$error)
@@ -402,8 +477,7 @@ make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=F
   return(list(nslrs, flags,errors))
 }
 
-
-summarize_tables <- function(predictor="larmord", error_type = "mae", averaged_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, names=c("2L94_1Z2J","1Z2J_2L94","2N82_2N7X","2N7X_2N82","1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V"), weight=1){
+summarize_tables <- function(predictor="larmord", error_type = "mae", averaged_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, names=c("2L94_1Z2J","1Z2J_2L94","2N82_2N7X","2N7X_2N82","1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V"), weight=1, outliers = FALSE){
   # function summarizes the results presented in the paper
   # this is the main driver function
   nslrs <- flags <- errors <- NULL
@@ -411,7 +485,7 @@ summarize_tables <- function(predictor="larmord", error_type = "mae", averaged_d
   error_type_index <- which(error_types==error_type)
 
   for (i in seq_along(names)){
-    m <- make_table(names[i],predictor,averaged_data, nmr_xray, conformational_averaging, weight, error_types)
+    m <- make_table(names[i],predictor,averaged_data, nmr_xray, conformational_averaging, weight, error_types, outliers)
     nslrs <- c(nslrs, m[[1]][error_type_index,])
     flags <- c(flags,m[[2]][error_type_index,])
     errors <- c(errors,m[[3]][error_type_index,])
@@ -510,6 +584,211 @@ correlation_spearman <- function(x){
   #' score_spearman(x)
   return(data.frame(cor=cor(x$expCS,x$predCS,method="spearman"),N=nrow(x)))
 }
+
+summarize_observed_cs <- function(rna, nuclei = c("H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8","C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8")){
+  require(plyr)
+  tmp <- data.frame(nucleus = nuclei)
+  
+  # load measure shifts
+  measured_names <- c("resname", "resid", "nucleus", "expCS", "expError")
+  measured_file <- paste("data/measured_shifts_",rna,".dat",sep = "")
+  expcs <- read.table(measured_file, col.names = measured_names, stringsAsFactors = FALSE)
+  
+  expcs$type <- "carbon"
+  expcs$type[grepl("H", expcs$nucleus)] <- "proton"
+  expcs$type[grepl("N", expcs$nucleus)] <- "nitrogen"
+  
+  counts <- ddply(.data = expcs, .variables = c("type","nucleus"), .fun = function(x){return(data.frame(N=nrow(x)))})
+  counts <- counts[counts$nucleus %in% nuclei, ]
+  counts$C <- sum(counts$N[counts$type == "carbon"])
+  counts$H <- sum(counts$N[counts$type == "proton"])
+  counts <- merge(tmp, counts, by = c("nucleus"), all = TRUE)
+  rownames(counts) <- counts$nucleus
+  counts <- counts[nuclei, ]
+  return(counts)
+}
+
+get_observed_shifts_matrix <- function(rnas=c("2LPS", "2M22", "2M21", "2L1V", "5KMZ")){
+  
+  for (i in seq_along(rnas)){
+    rna <- rnas[i]
+    tmp <- summarize_observed_cs(rna)
+    if (i==1){
+      mat <- tmp$N
+    } else {
+      mat <- rbind(mat, tmp$N)
+    }
+  }
+  colnames(mat) <- rownames(tmp)
+  rownames(mat) <- rnas
+  return(mat)
+}
+
+get_nucleus_errors <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", nuclei = c("C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8","H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8")){
+  # function to compute the resolving scores (i.e., the NSLR) for one of the test (i.e., chemical shifts in th pairfile) present in the manuscript
+  # 
+  library(nmR)
+  library(plyr)
+  # read in shifts
+  cs <- read.table(paste("data/",pairfile, sep=""), header = T)
+  outfile <- paste(paste("errors/",nucleus_group,sep=""), prediction_method, error_type, pairfile, sep="_")
+  
+  # select subset
+  if (nucleus_group=="proton" || nucleus_group=="carbon"){
+    cs <- subset(cs, type == nucleus_group)
+  } else {
+    nucleus_group <- "both"
+  }
+  
+  # set weight
+  if (prediction_method=="larmord"){
+    cs$predCS <- cs$larmord_predCS
+    if (weight==1){
+      cs$weight <- 1/cs$weight_larmord_1
+    } 
+    if (weight==2){
+      cs$weight <- 1/cs$weight_larmord_1
+    } 
+    if (c("sensi_larmord") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_larmord)*cs$weight_larmord_1
+      } 
+      if (weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_larmord)*cs$weight_larmord_2
+      } 
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_larmord)/cs$weight_larmord_1
+      } 
+      if (weight==6){
+        cs$weight <- sqrt(cs$sensi_larmord)/cs$weight_larmord_2
+      } 
+      
+    }
+  }
+  if (prediction_method=="ramsey"){
+    cs$predCS <- cs$ramsey_predCS
+    if (weight==1){
+      cs$weight <- 1/cs$weight_ramsey_1
+    } 
+    if (weight==2){
+      cs$weight <- 1/cs$weight_ramsey_1
+    } 
+    if (c("sensi_ramsey") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_ramsey)*cs$weight_ramsey_1
+      } 
+      if (weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_ramsey)*cs$weight_ramsey_2
+      } 
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_ramsey)/cs$weight_ramsey_1
+      } 
+      if (weight==6){
+        cs$weight <- sqrt(cs$sensi_ramsey)/cs$weight_ramsey_2
+      } 
+      
+    }
+  }
+  if (prediction_method=="mean"){
+    cs$predCS <- (cs$ramsey_predCS + cs$larmord_predCS)/2
+    if (weight==1){
+      cs$weight <- 1/((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+    } 
+    if(weight==2){
+      cs$weight <- 1/((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+    }
+    if (c("sensi_mean") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_mean)*((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+      } 
+      if(weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_mean)*((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+      }
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_mean)/((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+      } 
+      if(weight==6){
+        cs$weight <- sqrt(cs$sensi_mean)/((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+      }
+    }
+  }
+  
+  if (error_type=="rmse"){
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag","nucleus"), .fun=score_rmse)
+  }
+  if (error_type=="mae") {
+    errors <- ddply(.dat=cs, .var=c("nucleus", "model","reference_flag"), .fun=score_mae)
+  }
+  if (error_type=="geo_mae") {
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag","nucleus"), .fun=score_geo_mae)
+  }
+  if (error_type=="tau") {
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag","nucleus"), .fun=correlation_kendall)
+  }
+  if (error_type=="r") {
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag", "nucleus"), .fun=correlation_spearman)
+  }
+  if (error_type=="rho") {
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag","nucleus"), .fun=correlation_pearson)
+  }
+  
+  tmp <- expand.grid(unique(errors$model), nuclei)
+  colnames(tmp) <- c("model", "nucleus")
+  
+  errors <- merge(errors, tmp, all = TRUE)
+  errors <- errors[order(errors$model,errors$nucleus), ]
+  cnames <- subset(errors, model == 1)$nucleus
+  mat <- matrix(errors$V1, byrow = TRUE, nrow=length(unique(errors$model)), ncol = length(nuclei))
+  colnames(mat) <- cnames
+  mat <- mat[ ,nuclei]
+  
+  model_info <- unique(errors[,c("model", "reference_flag")])
+  model_info <- model_info[complete.cases(model_info),]
+  mat <- cbind(model_info, mat)
+  return(mat)
+}
+
+make_table_errors_nucleus <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), predictor="larmord", weight=1, error_type="mae", outliers = FALSE){
+  # make summary tables of errors 
+  for (i in seq_along(pairs)){
+    pair <- pairs[i]
+    file <- paste("chemical_shifts_",pair,".txt",sep="")
+    out <- get_nucleus_errors(file, error_type = error_type, weight = weight, nucleus_group = "both", prediction_method = predictor)
+    out$id <- pair
+    if (i==1){
+      error_matrix <- out
+    } else {
+      error_matrix <- rbind(error_matrix, out)
+    }
+  }
+  return(error_matrix)
+}
+
+nuclei_importance <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), predictor="larmord", weight=1, error_type="mae"){
+  # see: https://www.r-bloggers.com/variable-importance-plot-and-variable-selection/
+  # see: http://freakonometrics.hypotheses.org/19458
+  # see: 
+  require(randomForest)
+  t <- make_table_errors_nucleus(pairs, predictor, weight, error_type)
+  data <- t[, !(colnames(t) %in% c("model", "id"))]
+  data$reference_flag <- as.factor(data$reference_flag)
+  names <- unlist(strsplit("reference_flag C1p C2p C3p C4p C5p C2 C5 C6 C8 H1p H2p H3p H4p H5p H5pp H2 H5 H6 H8", " "))
+  colnames(data) <- names
+  rf <- randomForest(formula = reference_flag~., data = data, na.action = na.exclude)
+  varImpPlot(rf)
+  return(rf)
+}
+
+plot_importance <- function(rf, figfile = "test.pdf"){
+  tmp <- as.data.frame(rf$importance)
+  tmp$nucleus <- c("C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8","H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8") 
+  names_tmp <- tmp[order(tmp$MeanDecreaseGini, decreasing = F),]
+  pdf(file = figfile, width = 4/2, height = 6/2)
+  varImpPlot(rf, scale = TRUE, lcolor = "blue",  bg = "red", pt.cex = 0.8, labels = names_tmp$nucleus, main = "", cex = 0.5)  
+  abline(h=15, lty="dashed", lwd = "2.5")
+  dev.off()
+}
+
 
 
 

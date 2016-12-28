@@ -54,13 +54,13 @@ get_errors <- function(cs, nucleus_group = "both", prediction_method = "larmord"
   }
 
   if (error_type=="rmse"){
-    errors <- ddply(.dat=cs, .var=c("model","reference_flag"), .fun=score_rmse)
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag","rmsd","GDT"), .fun=score_rmse)
   }
   if (error_type=="mae") {
     errors <- ddply(.dat=cs, .var=c("model","reference_flag","rmsd","GDT"), .fun=score_mae)
   }
   if (error_type=="geo_mae") {
-    errors <- ddply(.dat=cs, .var=c("model","reference_flag"), .fun=score_geo_mae)
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag","rmsd","GDT"), .fun=score_geo_mae)
   }
   if (error_type=="tau") {
     tmp <- ddply(.dat=cs, .var=c("model","reference_flag", "type"), .fun=correlation_kendall)
@@ -96,11 +96,11 @@ get_errors <- function(cs, nucleus_group = "both", prediction_method = "larmord"
 plot_trace_bins <- function(cs, width = 0.5){
   require(plyr)
   require(Hmisc)
-  errors <- get_errors(cs, prediction_method = "larmord")
-  data <- errors[,c("rmsd","error")]
-  errors <- get_errors(cs, prediction_method = "ramsey")
+  errors <- get_errors(cs, prediction_method = "larmord",error_type = "rmse")
+  data <- errors[,c("GDT","error")]
+  errors <- get_errors(cs, prediction_method = "ramsey",error_type = "rmse")
   data <- cbind(data, errors[,c("error")])
-  errors <- get_errors(cs, prediction_method = "consensus")
+  errors <- get_errors(cs, prediction_method = "consensus",error_type = "rmse")
   data <- cbind(data, errors[,c("error")])
   
   min_y <- min(as.vector(data[,-1]))
@@ -128,7 +128,6 @@ plot_trace_bins <- function(cs, width = 0.5){
   colnames(d) <- c("x","y","sd")
   points(d$x, d$y, type="n")
   with (data = d, expr = errbar(x, y, y+sd, y-sd, add=T, pch=21, cap=.015, errbar.col="red", bg = "red", lwd=u_lwd))
-  
 }
 
 
