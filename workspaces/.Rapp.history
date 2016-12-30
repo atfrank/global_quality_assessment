@@ -1,0 +1,59 @@
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_FALSE.RData")
+ls()
+?save.image
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_FALSE.RData")
+ls()
+min_nslrs
+sm_all_mean
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_FALSE.RData")
+ls()
+min_nslrs
+matrix(min_nslrs, ncol=3)
+m <- matrix(min_nslrs, ncol=3)
+apply(m, 2, max)
+threshold
+thresholds
+apply(m, 2, which.max)
+thresholds[apply(m, 2, which.max)]
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_TRUE.RData")
+ls()
+min_nslrs
+matrix(min_nslrs, ncol=3)
+m <- matrix(min_nslrs, ncol=3)
+colnames(m) <- thresholds
+m
+colnames
+thresholds
+rownames(m) <- thresholds
+m
+colnames(m) <- c("mean", "larmord", "ramsey")
+m
+rowMeans(m)
+cbind(m,rowMeans(m))
+cbind(m,mean=rowMeans(m))
+cbind(m,average=rowMeans(m))
+m <- matrix(min_nslrs, ncol=3)
+m[which.max(m[,4])]
+m[which.max(m[,4]),]
+m[which.max(m[,3]),]
+m <- cbind(m,average=rowMeans(m))
+m[which.max(m[,4]),]
+which.max(m[,4])
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_FALSE.RData")
+ls()
+min_nslrs
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_5_correct_FALSE.RData")
+min_nslrs
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_6_correct_FALSE.RData")
+min_nslrs
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_2_correct_FALSE.RData")
+min_nslrs
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_3_correct_FALSE.RData")
+min_nslrs
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_4_correct_FALSE.RData")
+min_nslrs
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_5_correct_FALSE.RData")
+min_nslrs
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_FALSE.RData")
+min_nslrs
+round(min_nslrs,3)

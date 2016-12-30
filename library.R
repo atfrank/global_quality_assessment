@@ -214,14 +214,14 @@ get_cs <- function(pairfile, nucleus_group = "both", prediction_method = "larmor
   return(cs)
 }
 
-get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", conformational_averaging = FALSE, outliers = NULL){
+get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", conformational_averaging = FALSE, outliers = "none"){
   # function to compute the resolving scores (i.e., the NSLR) for one of the test (i.e., chemical shifts in th pairfile) present in the manuscript
   # 
   library(nmR)
   library(plyr)
   # read in shifts
   cs <- read.table(paste("data/",pairfile, sep=""), header = T)
-  outfile <- paste(paste("errors/",nucleus_group,sep=""), prediction_method, error_type, pairfile, sep="_")
+  outfile <- paste(paste("errors/",nucleus_group, sep=""), prediction_method, error_type, weight, outliers, pairfile, sep="_")
 
   # select subset
   if (nucleus_group=="proton" || nucleus_group=="carbon"){
@@ -310,7 +310,7 @@ get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larm
   }
   
   # remove outliers
-  if(!is.null(outliers)){cs <- remove_outliers(cs, outliers)}
+  if(outliers != "none"){cs <- remove_outliers(cs, outliers)}
 
   if (error_type=="rmse"){
     errors <- ddply(.dat=cs, .var=c("model","reference_flag"), .fun=score_rmse)
@@ -446,7 +446,7 @@ make_nslr_plots <- function(m, labels=NULL, figfile="test.pdf"){
   dev.off()
 }
 
-make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, weight=1, error_types=c("mae","rmse","r","tau","rho"), outliers = NULL){
+make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, weight=1, error_types=c("mae","rmse","r","tau","rho"), outliers = "none"){
   # make summary tables 
   # list contains: 1) NSLR -- resolving score, 2) Flags -- specifying whether the lowest error model was a reference model, 3) Lowest Errors -- error for the lowest error model in a given test
   # the three columns correspond to the results obtained when using 1H, 13C, and both 1H and 13C
@@ -477,11 +477,11 @@ make_table <- function(pair, predictor="larmord", average_data=FALSE, nmr_xray=F
   return(list(nslrs, flags,errors))
 }
 
-summarize_tables <- function(predictor="larmord", error_type = "mae", averaged_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, names=c("2L94_1Z2J","1Z2J_2L94","2N82_2N7X","2N7X_2N82","1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V"), weight=1, outliers = NULL){
+summarize_tables <- function(predictor="larmord", error_type = "mae", averaged_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, names=c("2L94_1Z2J","1Z2J_2L94","2N82_2N7X","2N7X_2N82","1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V"), weight=1, outliers = "none"){
   # function summarizes the results presented in the paper
   # this is the main driver function
   nslrs <- flags <- errors <- NULL
-  error_types  <- c("mae","rmse","tau","r","rho","geo_mae")
+  error_types  <- c("mae")
   error_type_index <- which(error_types==error_type)
 
   for (i in seq_along(names)){
@@ -624,7 +624,7 @@ get_observed_shifts_matrix <- function(rnas=c("2LPS", "2M22", "2M21", "2L1V", "5
   return(mat)
 }
 
-get_nucleus_errors <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", nuclei = c("C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8","H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8")){
+get_nucleus_errors <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", nuclei = c("C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8","H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8"), outliers = "none"){
   # function to compute the resolving scores (i.e., the NSLR) for one of the test (i.e., chemical shifts in th pairfile) present in the manuscript
   # 
   library(nmR)
@@ -713,6 +713,9 @@ get_nucleus_errors <- function(pairfile, nucleus_group = "both", prediction_meth
     }
   }
   
+  # remove outliers
+  if(outliers != "none"){cs <- remove_outliers(cs, outliers)}
+  
   if (error_type=="rmse"){
     errors <- ddply(.dat=cs, .var=c("model","reference_flag","nucleus"), .fun=score_rmse)
   }
@@ -748,12 +751,12 @@ get_nucleus_errors <- function(pairfile, nucleus_group = "both", prediction_meth
   return(mat)
 }
 
-make_table_errors_nucleus <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), predictor="larmord", weight=1, error_type="mae", outliers = NULL){
+make_table_errors_nucleus <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), predictor="larmord", weight=1, error_type="mae", outliers = "none"){
   # make summary tables of errors 
   for (i in seq_along(pairs)){
     pair <- pairs[i]
     file <- paste("chemical_shifts_",pair,".txt",sep="")
-    out <- get_nucleus_errors(file, error_type = error_type, weight = weight, nucleus_group = "both", prediction_method = predictor)
+    out <- get_nucleus_errors(file, error_type = error_type, weight = weight, nucleus_group = "both", prediction_method = predictor, outliers = outliers)
     out$id <- pair
     if (i==1){
       error_matrix <- out
@@ -764,12 +767,12 @@ make_table_errors_nucleus <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21
   return(error_matrix)
 }
 
-nuclei_importance <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), predictor="larmord", weight=1, error_type="mae"){
+nuclei_importance <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), predictor="larmord", weight=1, error_type="mae", outliers="none"){
   # see: https://www.r-bloggers.com/variable-importance-plot-and-variable-selection/
   # see: http://freakonometrics.hypotheses.org/19458
   # see: 
   require(randomForest)
-  t <- make_table_errors_nucleus(pairs, predictor, weight, error_type)
+  t <- make_table_errors_nucleus(pairs, predictor, weight, error_type, outliers)
   data <- t[, !(colnames(t) %in% c("model", "id"))]
   data$reference_flag <- as.factor(data$reference_flag)
   names <- unlist(strsplit("reference_flag C1p C2p C3p C4p C5p C2 C5 C6 C8 H1p H2p H3p H4p H5p H5pp H2 H5 H6 H8", " "))
@@ -781,14 +784,53 @@ nuclei_importance <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_
 
 plot_importance <- function(rf, figfile = "test.pdf"){
   tmp <- as.data.frame(rf$importance)
-  tmp$nucleus <- c("C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8","H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8") 
+  tmp$nucleus <- nuclei <- c("C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8","H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8") 
   names_tmp <- tmp[order(tmp$MeanDecreaseGini, decreasing = F),]
-  pdf(file = figfile, width = 4/2, height = 6/2)
+  if(!is.null(figfile)){pdf(file = figfile, width = 4/2, height = 6/2)}
   varImpPlot(rf, scale = TRUE, lcolor = "blue",  bg = "red", pt.cex = 0.8, labels = names_tmp$nucleus, main = "", cex = 0.5)  
   abline(h=15, lty="dashed", lwd = "2.5")
-  dev.off()
+  if(!is.null(figfile)){dev.off()}
+  rownames(tmp) <- nuclei
+  tmp <- tmp[order(tmp$MeanDecreaseGini, decreasing = T),]
+  tmp$rank <- 1:nrow(tmp)
+  tmp <- tmp[nuclei,]
+  return(tmp)
 }
 
+additional_analysis <- function(){
+  rf_l <- nuclei_importance(predictor = "larmord")
+  rf_r <- nuclei_importance(predictor = "ramsey")
+  rf_m <- nuclei_importance(predictor = "mean")
+  
+  plot_importance(rf_l, figfile = "figures/importance_larmord.pdf")
+  plot_importance(rf_r, figfile = "figures/importance_ramsey.pdf")
+  plot_importance(rf_m, figfile = "figures/importance_mean.pdf")
+}
 
+nuclei_importance_all_test <- function(predictors = "mean", pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), outliers = "none"){
+  for (predictor in predictors){
+    outfile1 <- paste("workspaces/importance_rank_", predictor,".RData", sep = "")
+    for (pair in pairs){
+      outfile2 <- paste("figures/importance_", pair, "_", predictor, ".pdf", sep = "")
+      rf <- nuclei_importance(predictor = predictor)
+      tmp <- plot_importance(rf, outfile2)
+      tmp <- tmp[,c("nucleus","rank")]
+      ifelse(!exists("mat"), mat <- tmp, mat <- cbind(mat, tmp$rank))
+    }
+    colnames(mat) <- c("nucleus",pairs)
+    save(mat, file = outfile1)
+    rm(mat)
+  }
+}
 
+get_table_importance_ranking <- function(predictors=c("mean","larmord","ramsey")){
+  for (i in seq_along(predictors)){
+    infile1 <- paste("workspaces/importance_rank_", predictors[i],".RData", sep = "")
+    load(infile1)
+    mat$mean <- as.integer(rowMeans(mat[,-1]))
+    ifelse(!exists("ranks"), ranks <- mat[,c("nucleus","mean")], ranks <- cbind(ranks, mat$mean))
+  }
+  colnames(ranks) <- c("nucleus",predictors)
+  return(ranks)
+}
 

@@ -6,9 +6,10 @@ setwd("~/GitSoftware/global_quality_assessment/")
 
 # load user functions
 source("library.R")
+
 main_manuscript <- function(){
   # loop over analysis
-  for (correct in c(TRUE)){
+  for (correct in c(FALSE, TRUE)){
     # read in pair info used for five (5) tests of the ability of chemical shifts assess the global quality of NMR structures
     pairs <- read.table("data/tests_info", col.names = c("pair", "pair_name", "ref", "threshold"))
     pair_names <- c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ")
@@ -16,9 +17,12 @@ main_manuscript <- function(){
     # initialize data 
     initialize_analysis(pairs, correct_shifts = correct)
     
-    for (wt in 5:6){
+    for (wt in 1:6){
+      # variables for outlier analysis
+      min_nslrs <- NULL
+      thresholds <- c(1:20, "none")
       # Errors determined using average structure
-      sm_average_mean <- summarize_tables("mean","mae", TRUE, FALSE, FALSE, names=pair_names, weight = wt, outliers = FALSE)
+      sm_average_mean <- summarize_tables("mean","mae", TRUE, FALSE, FALSE, names=pair_names, weight = wt )
       sm_average_larmord <- summarize_tables("larmord","mae", TRUE, FALSE, FALSE, names=pair_names, weight = wt)
       sm_average_ramsey <- summarize_tables("ramsey","mae", TRUE, FALSE, FALSE, names=pair_names, weight = wt)
       
@@ -32,6 +36,21 @@ main_manuscript <- function(){
       sm_all_larmord <- summarize_tables("larmord","mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt)
       sm_all_ramsey <- summarize_tables("ramsey","mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt)
       
+      # Check impact of outliers
+      for (threshold in thresholds){
+        m <- summarize_tables("mean","mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt, outliers = threshold)
+        min_nslrs <- c(min_nslrs, mean(m[[1]]))
+        m <- summarize_tables("larmord","mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt, outliers = threshold)
+        min_nslrs <- c(min_nslrs, mean(m[[1]]))
+        m <- summarize_tables("ramsey","mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt, outliers = threshold)
+        min_nslrs <- c(min_nslrs, mean(m[[1]]))
+      }
+      
+      min_nslrs <- matrix(min_nslrs, ncol=3, byrow = TRUE)
+      rownames(min_nslrs) <- thresholds
+      colnames(min_nslrs) <- c("mean", "larmord", "ramsey")
+      min_nslrs <- cbind(min_nslrs,average=rowMeans(min_nslrs))
+
       #  **** Begin supporting information manuscript analysis ****
       # Part 1:
       # True-positive rates analysis
@@ -80,18 +99,9 @@ main_manuscript <- function(){
       # (3) LARMORD
       sm_xray_larmord <- summarize_tables("larmord","mae", FALSE, TRUE, FALSE, c("1SCL_430D","2LPS_1KXK","28SR_1LNT"))
       #  **** End supporting information manuscript analysis ****
-      save.image(file = paste("data/workspace_wt_", wt, "_correct_", as.character(correct), ".RData", sep = ""))
+      save(list=ls(), file= paste("workspaces/workspace_wt_", wt, "_correct_", as.character(correct), ".RData", sep = ""))
     }
   }
 }
 
-
-additional_analysis <- function(){
-  rf_l <- nuclei_importance(predictor = "larmord")
-  rf_r <- nuclei_importance(predictor = "ramsey")
-  rf_m <- nuclei_importance(predictor = "mean")
-  
-  plot_importance(rf_l, figfile = "figures/importance_larmord.pdf")
-  plot_importance(rf_r, figfile = "figures/importance_ramsey.pdf")
-  plot_importance(rf_m, figfile = "figures/importance_mean.pdf")
-}
+main_manuscript()
