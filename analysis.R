@@ -16,11 +16,10 @@ main_manuscript <- function(){
     
     # initialize data 
     initialize_analysis(pairs, correct_shifts = correct)
-    
-    for (wt in 1:6){
+    for (wt in 1:2){
       # variables for outlier analysis
       min_nslrs <- NULL
-      thresholds <- c(1:20, "none")
+      thresholds <- c(1:30, "none")
       # Errors determined using average structure
       sm_average_mean <- summarize_tables("mean","mae", TRUE, FALSE, FALSE, names=pair_names, weight = wt )
       sm_average_larmord <- summarize_tables("larmord","mae", TRUE, FALSE, FALSE, names=pair_names, weight = wt)
@@ -37,19 +36,19 @@ main_manuscript <- function(){
       sm_all_ramsey <- summarize_tables("ramsey","mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt)
       
       # Check impact of outliers
-      for (threshold in thresholds){
-        m <- summarize_tables("mean","mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt, outliers = threshold)
-        min_nslrs <- c(min_nslrs, mean(m[[1]]))
-        m <- summarize_tables("larmord","mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt, outliers = threshold)
-        min_nslrs <- c(min_nslrs, mean(m[[1]]))
-        m <- summarize_tables("ramsey","mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt, outliers = threshold)
-        min_nslrs <- c(min_nslrs, mean(m[[1]]))
+      for (t in seq_along(thresholds)){
+        for (predictor in c("mean","larmord","ramsey")){
+          ifelse(thresholds[t]=="none", threshold <- thresholds[t], threshold <- as.numeric(thresholds[t]))
+          m <- summarize_tables(predictor,"mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt, outliers = threshold)
+          min_nslrs <- c(min_nslrs, mean(m[[1]]))
+        }
       }
       
       min_nslrs <- matrix(min_nslrs, ncol=3, byrow = TRUE)
       rownames(min_nslrs) <- thresholds
       colnames(min_nslrs) <- c("mean", "larmord", "ramsey")
       min_nslrs <- cbind(min_nslrs,average=rowMeans(min_nslrs))
+      
 
       #  **** Begin supporting information manuscript analysis ****
       # Part 1:
