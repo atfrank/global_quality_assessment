@@ -111,3 +111,8 @@ load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/
 min_nslrs
 load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_FALSE.RData")
 ls()
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_FALSE.RData")
+min_nslrs
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_FALSE.RData")
+min_nslrs
+round(min_nslrs, 3)

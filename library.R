@@ -772,12 +772,12 @@ make_table_errors_nucleus <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21
   return(error_matrix)
 }
 
-nuclei_importance <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), predictor="larmord", weight=1, error_type="mae", outliers="none"){
+nuclei_importance <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), predictor="larmord", weight=1, error_type="mae", outliers="none", nuclei = NULL){
   # see: https://www.r-bloggers.com/variable-importance-plot-and-variable-selection/
   # see: http://freakonometrics.hypotheses.org/19458
   # see: 
   require(randomForest)
-  t <- make_table_errors_nucleus(pairs, predictor, weight, error_type, outliers)
+  t <- make_table_errors_nucleus(pairs, predictor, weight, error_type, outliers, nuclei)
   data <- t[, !(colnames(t) %in% c("model", "id"))]
   data$reference_flag <- as.factor(data$reference_flag)
   names <- unlist(strsplit("reference_flag C1p C2p C3p C4p C5p C2 C5 C6 C8 H1p H2p H3p H4p H5p H5pp H2 H5 H6 H8", " "))
@@ -802,6 +802,117 @@ plot_importance <- function(rf, figfile = "test.pdf"){
   return(tmp)
 }
 
+remove_outliers <- function(cs, threshold=5.0){
+  diff <- ddply(.data = cs, .variables = c("resid", "nucleus"), .fun = function(x){data.frame(diff=mean(x$weight*abs(x$expCS-x$predCS)))})
+  outliers <- subset(diff, diff>threshold)
+  outliers$tag <- paste(outliers$resid, outliers$nucleus, sep = ":")
+  cs$tag <- paste(cs$resid, cs$nucleus, sep = ":")
+  if (nrow(outliers)!=0){
+    #print(outliers)
+    cs <- cs[ !(cs$tag %in% outliers$tag), ]
+  }
+  return(cs)
+}
+
+count_outliers <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", conformational_averaging = FALSE, outliers = "none", nuclei = NULL){
+  # function to compute the resolving scores (i.e., the NSLR) for one of the test (i.e., chemical shifts in th pairfile) present in the manuscript
+  # 
+  library(nmR)
+  library(plyr)
+  # read in shifts
+  cs <- read.table(paste("data/",pairfile, sep=""), header = T)
+
+  # select subset
+  if (nucleus_group=="proton" || nucleus_group=="carbon"){
+    cs <- subset(cs, type == nucleus_group)
+  } else {
+    nucleus_group <- "both"
+  }
+  
+  # additional filtering
+  if(!is.null(nuclei)){
+    cs <- cs[(as.character(cs$nucleus) %in% nuclei) ,]
+  }
+  
+  # set weight
+  if (prediction_method=="larmord"){
+    cs$predCS <- cs$larmord_predCS
+    if (weight==1){
+      cs$weight <- 1/cs$weight_larmord_1
+    } 
+    if (weight==2){
+      cs$weight <- 1/cs$weight_larmord_1
+    } 
+    if (c("sensi_larmord") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_larmord)*cs$weight_larmord_1
+      } 
+      if (weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_larmord)*cs$weight_larmord_2
+      } 
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_larmord)/cs$weight_larmord_1
+      } 
+      if (weight==6){
+        cs$weight <- sqrt(cs$sensi_larmord)/cs$weight_larmord_2
+      } 
+      
+    }
+  }
+  if (prediction_method=="ramsey"){
+    cs$predCS <- cs$ramsey_predCS
+    if (weight==1){
+      cs$weight <- 1/cs$weight_ramsey_1
+    } 
+    if (weight==2){
+      cs$weight <- 1/cs$weight_ramsey_1
+    } 
+    if (c("sensi_ramsey") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_ramsey)*cs$weight_ramsey_1
+      } 
+      if (weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_ramsey)*cs$weight_ramsey_2
+      } 
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_ramsey)/cs$weight_ramsey_1
+      } 
+      if (weight==6){
+        cs$weight <- sqrt(cs$sensi_ramsey)/cs$weight_ramsey_2
+      } 
+      
+    }
+  }
+  if (prediction_method=="mean"){
+    cs$predCS <- (cs$ramsey_predCS + cs$larmord_predCS)/2
+    if (weight==1){
+      cs$weight <- 1/((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+    } 
+    if(weight==2){
+      cs$weight <- 1/((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+    }
+    if (c("sensi_mean") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_mean)*((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+      } 
+      if(weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_mean)*((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+      }
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_mean)/((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+      } 
+      if(weight==6){
+        cs$weight <- sqrt(cs$sensi_mean)/((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+      }
+    }
+  }
+
+  # remove outliers
+  nocs_0 <- nrow(unique(cs[,c("resid","nucleus")]))
+  if(outliers != "none"){cs <- remove_outliers(cs, outliers)}
+  nocs_1 <- nrow(unique(cs[,c("resid","nucleus")]))
+  return((nocs_0-nocs_1)/nocs_0)
+}
 
 additional_analysis <- function(){
   rf_l <- nuclei_importance(predictor = "larmord")
@@ -813,13 +924,14 @@ additional_analysis <- function(){
   plot_importance(rf_m, figfile = "figures/importance_mean.pdf")
 }
 
-nuclei_importance_all_test <- function(predictors = "mean", pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), outliers = "none", nuclei = NULL){
+nuclei_importance_all_test <- function(predictors = c("mean", "larmord", "ramsey"), pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ"), outliers = "none", nuclei = c("C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8","H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8")){
   for (predictor in predictors){
     outfile1 <- paste("workspaces/importance_rank_", predictor,".RData", sep = "")
     for (pair in pairs){
       outfile2 <- paste("figures/importance_", pair, "_", predictor, ".pdf", sep = "")
-      rf <- nuclei_importance(predictor = predictor)
+      rf <- nuclei_importance(predictor = predictor, outliers = outliers, nuclei = nuclei)
       tmp <- plot_importance(rf, outfile2)
+      tmp$MeanDecreaseGini <- tmp$MeanDecreaseGini/max(tmp$MeanDecreaseGini)
       tmp <- tmp[,c("nucleus","rank")]
       ifelse(!exists("mat"), mat <- tmp, mat <- cbind(mat, tmp$rank))
     }
@@ -829,18 +941,63 @@ nuclei_importance_all_test <- function(predictors = "mean", pairs=c("1R2P_2LPS",
   }
 }
 
-get_table_importance_ranking <- function(predictors=c("mean","larmord","ramsey")){
+get_table_importance_ranking <- function(predictors = c("mean", "larmord", "ramsey"), thresholds = c(5, 5, 6)){
+  if(length(predictors) != length(thresholds)){
+    stop(cat(sprintf("predictors and thresholds must be the same length: %s and %s\n", length(predictors), length(thresholds))), call. = FALSE)
+  }
   for (i in seq_along(predictors)){
+    nuclei_importance_all_test(predictors = predictors[i], outliers = thresholds[i])
     infile1 <- paste("workspaces/importance_rank_", predictors[i],".RData", sep = "")
     load(infile1)
-    mat$mean <- as.integer(rowMeans(mat[,-1]))
+    mat$mean <- round(rowMeans(mat[,-1]),3)
     ifelse(!exists("ranks"), ranks <- mat[,c("nucleus","mean")], ranks <- cbind(ranks, mat$mean))
   }
   colnames(ranks) <- c("nucleus",predictors)
   return(ranks)
 }
 
-get_mean_nslrs_nuclei <- function(nuclei= c("C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8","H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8") ){
-  m <- summarize_tables("larmord","mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt, outliers = 3)
-  return(mean(m[[1]]))
+get_mean_nslrs_all <- function(predictors = c("mean", "larmord", "ramsey"), thresholds = c(5, 5, 6)){
+  if(length(predictors) != length(thresholds)){
+    stop(cat(sprintf("predictors and thresholds must be the same length: %s and %s\n", length(predictors), length(thresholds))), call. = FALSE)
+  }
+  mean_nslr <- NULL
+  for (i in seq_along(predictors)){
+    mean_nslr <- c(mean_nslr, get_mean_nslrs_for_important_nuclei(1, 11, predictor = predictors[i], threshold = thresholds[i]))
+    mean_nslr <- c(mean_nslr, get_mean_nslrs_for_important_nuclei(12, 19, predictor = predictors[i], threshold = thresholds[i]))
+  }
+  mean_nslr <- matrix(mean_nslr, ncol = 3, byrow = FALSE)
+  colnames(mean_nslr) <- c("mean", "larmord", "ramsey")
+  rownames(mean_nslr) <- c("top10", "bottom10")
+  return(mean_nslr)
+}
+
+get_mean_nslrs_for_important_nuclei <- function(start, stop, predictor = "larmord", wt = 1, threshold = 5, pairs_names =  c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ")){
+  r <- get_table_importance_ranking(predictor, threshold = threshold)
+  nuclei <- r$nucleus[order(r[,predictor], decreasing = TRUE)]
+  nuclei <- c("C1'","C2'","C3'","C4'","C5'","H1'","H2'","H3'","H4'","H5'","H5''","C2","C5","C6","C8","H2","H5","H6","H8")
+  nuclei <- nuclei[start:stop]
+  print(nuclei)
+  m <- summarize_tables(predictor, "mae", FALSE, FALSE, FALSE, names=pair_names, weight = wt, outliers = threshold, nuclei = nuclei)
+  return(round(mean(m[[1]]), 3))
+}
+
+count_all_outliers <- function(pair_names = c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V","2N6Q_5KMZ")){
+  counts <- NULL
+  thresholds <- c(1:12, "none")
+  for (t in seq_along(thresholds)){
+    for (predictor in c("mean","larmord","ramsey")){
+      tmp <- NULL
+      for (pair in pair_names){
+        file <- paste("chemical_shifts_", pair, ".txt", sep = "")
+        ifelse(thresholds[t]=="none", threshold <- thresholds[t], threshold <- as.numeric(thresholds[t]))
+        tmp <- c(tmp, count_outliers(file, prediction_method = predictor, outliers = threshold))
+      }
+      counts <- c(counts, round(mean(tmp), 3))
+    }
+  }
+  counts <- matrix(counts, ncol=3, byrow = TRUE)
+  rownames(counts) <- thresholds
+  colnames(counts) <- c("mean", "larmord", "ramsey")
+  counts <- cbind(counts,average=rowMeans(counts))
+  return(counts)
 }
