@@ -367,43 +367,65 @@ remove_outliers <- function(cs, threshold=5.0){
   return(cs)
 }
 
-make_error_barplot <- function(pairs=c("1R2P_2LPS", "2FRL_2M22", "2H2X_2M21", "2KFC_2L1V", "2N6Q_5KMZ"), nucleus_group = "both", prediction_method = "larmord", error_type = "rmse"){
+make_error_barplot <- function(pairs=c("1R2P_2LPS", "2FRL_2M22", "2H2X_2M21", "2KFC_2L1V", "2N6Q_5KMZ"), nucleus_group = "both", prediction_method = "larmord", error_type = "rmse", weight = 1, outliers = "none", segments = FALSE, display = FALSE){
   # make barplot shown in figure 2
-  figfile <- paste(paste("figures/",nucleus_group, sep=""), prediction_method, error_type, "fig.pdf", sep="_")
-  pdf(file = figfile, width = 20, height = 20)
-  par(lwd=3,mfrow=c(4,2),mgp=c(1.6, 0.4, 0),tcl=-0.3,oma=c(0.1,0.2,0.2,0.2))
-  for (pair in pairs){
+  for (i in seq_along(pairs)){
+    pair <-pairs[i]
+    figfile <- paste(paste("figures/",nucleus_group, sep=""), pair, prediction_method, error_type, "fig.pdf", sep="_")
+    if(!display){pdf(file = figfile, width = 10.277778, height = 6.027778)}
+    par(lwd=1.5,mfrow=c(1,1),mgp=c(1.6, 0.4, 0),tcl=-0.3,oma=c(0.1,0.2,0.2,0.2))
     pairfile <- paste("chemical_shifts_",pair,".txt",sep="")
-    infile <- paste(paste("errors/",nucleus_group,sep=""), prediction_method, error_type, pairfile, sep="_")
+    infile <- paste(paste("errors/",nucleus_group, sep=""), prediction_method, error_type, weight, outliers, pairfile, sep="_")
     errors <- read.table(infile, header = T)
-    
-    cols <- rep("white",nrow(errors))
+    cols <- rep("cyan",nrow(errors))
     cols[errors$flag==0] <- "blue"
-    
     border_cols <- rep("black",nrow(errors))
-    border_cols[which.min(errors$error)] <- "red"
-    barplot(errors$error, col = cols, names.arg=errors$model, xlim=c(1,50),border = border_cols, lwd="2", las=2, cex.names = 2.1, cex.axis = 2.1)
+    cols[which.min(errors$error)] <- "red"
+    cols[errors$flag==0 & errors$error < max(errors$error[errors$flag==1])] <- "green"
+    
+    space <- 0.5
+    names <-errors$model
+    names <- unlist(strsplit(paste(seq(1, length(errors$error), 2), " "), " "))
+    if(length(errors$error) %% 2 != 0){names <- names[-length(names)]}
+    barplot(errors$error, col = cols, names.arg = names, space = space, xpd = FALSE, ylim=c(0.5, max(errors$error)+0.2), xlim=c(1,60), border = border_cols, lwd="3", las=2, cex.names = 2, cex.axis = 2)
     # add segment
     n <- length(errors$error)
     a <- sum(errors$flag==0)
     b <- a + 1
-    x0s <- c(0, b+2)
-    x1s <- c(a+2, n+2)
+    x0s <- c(space, a*(1+space)+space)
+    x1s <- c(a*(1+space), n*(1+space))
+
     # these are the y-coordinates for the horizontal lines
     # that you need to set to the desired values.
     y0s <- c(mean(errors$error[errors$flag==0]), mean(errors$error[errors$flag==1]))
     # add segments
-    segments(x0 = x0s, x1 = x1s, y0 = y0s, col = "cyan", lwd="3")
+    if(segments){segments(x0 = x0s, x1 = x1s, y0 = y0s, col = "black", lwd="3", lty = "dotted")}
+    # labels to each segment
+    lab1 <- as.character(round(mean(errors$error[errors$flag==0]),3))
+    lab2 <- as.character(round(mean(errors$error[errors$flag==1]),3))
+    lab1 <- sprintf("mean: %s", lab1)
+    lab2 <- sprintf("mean: %s", lab2)
+    lab3 <- sprintf("Test %s (%s)", i, pair)
+  
+    mid1 <- mean(c(x0s[1], x1s[1]))
+    mid2 <- mean(c(x0s[2], x1s[2]))
+    mid3 <- mean(c(x0s[1], x1s[2]))
+    ypos1 <- max(errors$error)+0.05
+    ypos2 <- ypos1+0.1
+    
+    text( x = mid1, y = ypos1, labels = lab1, cex = 1.5)
+    text( x = mid2, y = ypos1, labels = lab2, cex = 1.5)
+    text( x = mid3, y = ypos2, labels = lab3, cex = 1.5)
+    if(!display){dev.off()}
   }
-  dev.off()
 }
 
-generate_all_barplot <- function(){
+generate_all_barplot <- function(prediction_methods = c("larmord", "ramsey", "mean"), nucleus_groups = c("both","proton","carbon")){
   # make barplots like that figure 2
-  for (nucleus_group in c("proton","carbon","both")){
-    for (prediction_method in c("ramsey","mean","larmord")){
+  for (nucleus_group in nucleus_groups){
+    for (prediction_method in prediction_methods){
       for (error_type in c("mae")){
-        make_error_barplot(nucleus_group = nucleus_group, prediction_method = prediction_method, error_type = error_type)
+        make_error_barplot(nucleus_group = nucleus_group, error_type = error_type, prediction_method = prediction_method, outliers = 6, display = FALSE, segments = TRUE)
       }
     }
   }
