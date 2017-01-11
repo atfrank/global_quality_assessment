@@ -1,4 +1,6 @@
 .Rhistory
+*/*.Rhistory
+*.Rhistory
 .RData
 errors/*
 figures/*

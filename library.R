@@ -355,6 +355,122 @@ get_slrs <- function(pairfile, nucleus_group = "both", prediction_method = "larm
   return(data.frame(nslr=nslr(errors$flag),flag=errors$flag[1], error=errors$error[1]))
 }
 
+get_residue_errors <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", conformational_averaging = FALSE, outliers = "none", nuclei = NULL){
+  # function to compute the resolving scores (i.e., the NSLR) for one of the test (i.e., chemical shifts in th pairfile) present in the manuscript
+  # 
+  library(nmR)
+  library(plyr)
+  # read in shifts
+  cs <- read.table(paste(pairfile, sep=""), header = T)
+
+  # select subset
+  if (nucleus_group=="proton" || nucleus_group=="carbon"){
+    cs <- subset(cs, type == nucleus_group)
+  } else {
+    nucleus_group <- "both"
+  }
+  
+  # additional filtering
+  if(!is.null(nuclei)){
+    cs <- cs[(as.character(cs$nucleus) %in% nuclei) ,]
+  }
+  
+  # set weight
+  if (prediction_method=="larmord"){
+    cs$predCS <- cs$larmord_predCS
+    if (weight==1){
+      cs$weight <- 1/cs$weight_larmord_1
+    } 
+    if (weight==2){
+      cs$weight <- 1/cs$weight_larmord_1
+    } 
+    if (c("sensi_larmord") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_larmord)*cs$weight_larmord_1
+      } 
+      if (weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_larmord)*cs$weight_larmord_2
+      } 
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_larmord)/cs$weight_larmord_1
+      } 
+      if (weight==6){
+        cs$weight <- sqrt(cs$sensi_larmord)/cs$weight_larmord_2
+      } 
+      
+    }
+  }
+  if (prediction_method=="ramsey"){
+    cs$predCS <- cs$ramsey_predCS
+    if (weight==1){
+      cs$weight <- 1/cs$weight_ramsey_1
+    } 
+    if (weight==2){
+      cs$weight <- 1/cs$weight_ramsey_1
+    } 
+    if (c("sensi_ramsey") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_ramsey)*cs$weight_ramsey_1
+      } 
+      if (weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_ramsey)*cs$weight_ramsey_2
+      } 
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_ramsey)/cs$weight_ramsey_1
+      } 
+      if (weight==6){
+        cs$weight <- sqrt(cs$sensi_ramsey)/cs$weight_ramsey_2
+      } 
+      
+    }
+  }
+  if (prediction_method=="mean"){
+    cs$predCS <- (cs$ramsey_predCS + cs$larmord_predCS)/2
+    if (weight==1){
+      cs$weight <- 1/((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+    } 
+    if(weight==2){
+      cs$weight <- 1/((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+    }
+    if (c("sensi_mean") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_mean)*((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+      } 
+      if(weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_mean)*((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+      }
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_mean)/((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+      } 
+      if(weight==6){
+        cs$weight <- sqrt(cs$sensi_mean)/((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+      }
+    }
+  }
+  
+  if (conformational_averaging){
+    cs <- ddply(.dat=cs, .var=c("resid","resname","nucleus","expCS","weight","reference_flag","type"), .fun=function(x){mean(x$predCS)})
+    cs$model <- cs$reference_flag
+    cs$predCS <- cs$V1
+  }
+  
+  # remove outliers
+  if(outliers != "none"){cs <- remove_outliers(cs, outliers)}
+  
+  if (error_type=="rmse"){
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag", "resid"), .fun=score_rmse)
+  }
+  if (error_type=="mae") {
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag", "resid"), .fun=score_mae)
+  }
+  if (error_type=="geo_mae") {
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag", "resid"), .fun=score_geo_mae)
+  }
+
+  colnames(errors) <- c("model","flag", "resid", "error")
+
+  return(errors)
+}
 remove_outliers <- function(cs, threshold=5.0){
   diff <- ddply(.data = cs, .variables = c("resid", "nucleus"), .fun = function(x){data.frame(diff=mean(x$weight*abs(x$expCS-x$predCS)))})
   outliers <- subset(diff, diff>threshold)
@@ -1022,4 +1138,24 @@ count_all_outliers <- function(pair_names = c("1R2P_2LPS","2FRL_2M22","2H2X_2M21
   colnames(counts) <- c("mean", "larmord", "ramsey")
   counts <- cbind(counts,average=rowMeans(counts))
   return(counts)
+}
+
+plot_errors_structural_differences <- function(pair_name, ref_model, comp_model, outliers = "none"){
+  # read in average chemical shifts data
+  errors <- get_residue_errors(paste("data/chemical_shifts_", pair_name, ".txt", sep = ""), prediction_method = "mean", weight = 1, outliers = outliers, error_type = "mae")
+  
+  # read in local RMSD data
+  struct_info <- read.table(paste("spath/scratch/", tolower(pair_name), "_compare.txt", sep = ""), col.names = c("name", "id", "resid", "rmsd"))
+  
+  # merge based on resid
+  data <- merge(errors, struct_info, by = c("resid"))
+  data$rmsd <- data$rmsd/max(data$rmsd)
+  
+  # get data for reference
+  ref <- subset(data, model==ref_model)
+  comp <- subset(data, model==comp_model)
+  ref$diff <- comp$error - ref$error
+  rownames(ref) <- ref$resid
+  barplot(t(ref[, c("rmsd", "diff")]), beside = TRUE)
+  abline(h = mean(ref$rmsd), lwd = "3", lty = "dotted")
 }
