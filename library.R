@@ -1140,16 +1140,22 @@ count_all_outliers <- function(pair_names = c("1R2P_2LPS","2FRL_2M22","2H2X_2M21
   return(counts)
 }
 
-plot_errors_structural_differences <- function(pair_name, ref_model, comp_model, outliers = "none"){
+plot_errors_structural_differences <- function(pair_name, ref_model, comp_model, outliers = "none", average = TRUE, scale_rmsd = FALSE){
   # read in average chemical shifts data
-  errors <- get_residue_errors(paste("data/chemical_shifts_", pair_name, ".txt", sep = ""), prediction_method = "mean", weight = 1, outliers = outliers, error_type = "mae")
+  
+  if (!average){
+    errors <- get_residue_errors(paste("~/GitSoftware/global_quality_assessment/data/chemical_shifts_", pair_name, ".txt", sep = ""), prediction_method = "mean", weight = 1, outliers = outliers, error_type = "mae")
+  } else {
+    errors <- get_residue_errors(paste("~/GitSoftware/global_quality_assessment/data/chemical_shifts_", pair_name, "_average.txt", sep = ""), prediction_method = "mean", weight = 1, outliers = outliers, error_type = "mae")
+  }
   
   # read in local RMSD data
-  struct_info <- read.table(paste("spath/scratch/", tolower(pair_name), "_compare.txt", sep = ""), col.names = c("name", "id", "resid", "rmsd"))
+  struct_info <- read.table(paste("~/GitSoftware/global_quality_assessment/spath/scratch/", tolower(pair_name), "_compare.txt", sep = ""), col.names = c("name", "id", "resid", "rmsd"))
   
   # merge based on resid
   data <- merge(errors, struct_info, by = c("resid"))
-  data$rmsd <- data$rmsd/max(data$rmsd)
+  
+  ifelse(scale_rmsd, data$rmsd <- data$rmsd/max(data$rmsd), data$rmsd <- data$rmsd)
   
   # get data for reference
   ref <- subset(data, model==ref_model)
