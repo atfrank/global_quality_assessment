@@ -1140,7 +1140,7 @@ count_all_outliers <- function(pair_names = c("1R2P_2LPS","2FRL_2M22","2H2X_2M21
   return(counts)
 }
 
-plot_errors_structural_differences <- function(pair_name, ref_model, comp_model, outliers = "none", average = TRUE, scale_rmsd = FALSE){
+plot_errors_structural_differences <- function(pair_name, ref_model, comp_model, outliers = "none", average = TRUE, scale = FALSE){
   # read in average chemical shifts data
   
   if (!average){
@@ -1150,18 +1150,22 @@ plot_errors_structural_differences <- function(pair_name, ref_model, comp_model,
   }
   
   # read in local RMSD data
-  struct_info <- read.table(paste("~/GitSoftware/global_quality_assessment/spath/scratch/", tolower(pair_name), "_compare.txt", sep = ""), col.names = c("name", "id", "resid", "rmsd"))
+  struct_info_rmsd <- read.table(paste("~/GitSoftware/global_quality_assessment/spath/scratch/", tolower(pair_name), "_compare.txt", sep = ""), col.names = c("name", "id", "resid", "rmsd"))
+  struct_info_rmsf <- read.table(paste("~/GitSoftware/global_quality_assessment/spath/scratch/rmsf_",pair_name, ".txt", sep = ""), col.names = c("name", "id", "resid", "rmsf"))
+  struct_info <- merge(struct_info_rmsd, struct_info_rmsf, by = c("resid"))
   
   # merge based on resid
   data <- merge(errors, struct_info, by = c("resid"))
   
-  ifelse(scale_rmsd, data$rmsd <- data$rmsd/max(data$rmsd), data$rmsd <- data$rmsd)
+  ifelse(scale, data$rmsd <- data$rmsd/max(data$rmsd), data$rmsd <- data$rmsd)
+  ifelse(scale, data$rmsf <- data$rmsf/max(data$rmsf), data$rmsf <- data$rmsf)
   
   # get data for reference
   ref <- subset(data, model==ref_model)
   comp <- subset(data, model==comp_model)
   ref$diff <- comp$error - ref$error
   rownames(ref) <- ref$resid
-  barplot(t(ref[, c("rmsd", "diff")]), beside = TRUE)
+  #barplot(t(ref[, c("rmsd", "rmsf", "diff")]), beside = TRUE)
+  barplot(t(ref[, c("diff")]), beside = TRUE)
   abline(h = mean(ref$rmsd), lwd = "3", lty = "dotted")
 }

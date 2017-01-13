@@ -1,0 +1,13 @@
+#!/bin/bash
+# script to calculate RMSFs using updated coordinates of each of the five test cases we examine
+rnas="2LPS 2M22 2M21 2L1V 5KMZ"
+for rna in $rnas
+do
+  [[ $rna == "2LPS" ]] && id=1R2P_2LPS
+  [[ $rna == "2M22" ]] && id=2FRL_2M22
+  [[ $rna == "2M21" ]] && id=2H2X_2M21
+  [[ $rna == "2L1V" ]] && id=2KFC_2L1V
+  [[ $rna == "5KMZ" ]] && id=2N6Q_5KMZ
+	echo "\${PYMOL} -c -d \"compute_rmsf('${rna}')\" | grep RMSF-CALC" | bash > scratch/rmsf_${id}.txt
+done
+
