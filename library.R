@@ -471,6 +471,7 @@ get_residue_errors <- function(pairfile, nucleus_group = "both", prediction_meth
 
   return(errors)
 }
+
 remove_outliers <- function(cs, threshold=5.0){
   diff <- ddply(.data = cs, .variables = c("resid", "nucleus"), .fun = function(x){data.frame(diff=mean(x$weight*abs(x$expCS-x$predCS)))})
   outliers <- subset(diff, diff>threshold)
@@ -497,7 +498,7 @@ make_error_barplot <- function(pairs=c("1R2P_2LPS", "2FRL_2M22", "2H2X_2M21", "2
     cols[errors$flag==0] <- "blue"
     border_cols <- rep("black",nrow(errors))
     cols[which.min(errors$error)] <- "red"
-    cols[errors$flag==0 & errors$error < max(errors$error[errors$flag==1])] <- "green"
+    cols[which.min(errors$error[errors$flag==0])] <- "green"
     
     space <- 0.5
     names <-errors$model
@@ -671,16 +672,9 @@ get_errors_only <- function(summary){
   return(round(m,2))
 }
 
-create_tpr_tables <- function(predictors, averaged_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, names=c("2L94_1Z2J","1Z2J_2L94","2N82_2N7X","2N7X_2N82","1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V")){
+create_tpr_tables <- function(table){
   m <- NULL
-  for (predictor in predictors){
-    table <- summarize_tables(predictor,"mae", averaged_data, nmr_xray, conformational_averaging, names)
-    success_mae <- get_flags_only(table)['Success-Rate',]
-    table <- summarize_tables(predictor,"rmse", averaged_data, nmr_xray, conformational_averaging, names)
-    success_rmse <- get_flags_only(table)['Success-Rate',]
-   m <- c(m, paste(success_mae, " (", success_rmse,")", sep=""))
-  }
-  return(matrix(m, ncol = length(predictors), byrow=F))
+  success_mae <- get_flags_only(table)['Success-Rate',]
 }
 
 create_nslr_tables <- function(predictors, averaged_data=FALSE, nmr_xray=FALSE, conformational_averaging=FALSE, names=c("2L94_1Z2J","1Z2J_2L94","2N82_2N7X","2N7X_2N82","1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_2L1V")){
