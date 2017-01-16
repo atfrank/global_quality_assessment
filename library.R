@@ -1163,3 +1163,10 @@ plot_errors_structural_differences <- function(pair_name, ref_model, comp_model,
   barplot(t(ref[, c("diff")]), beside = TRUE)
   abline(h = mean(ref$rmsd), lwd = "3", lty = "dotted")
 }
+
+
+mean_rmsf <- function(pair_name){
+  # read in local RMSD data
+  struct_info_rmsf <- read.table(paste("~/GitSoftware/global_quality_assessment/spath/scratch/rmsf_",pair_name, ".txt", sep = ""), col.names = c("name", "id", "resid", "rmsf"))
+  return(data.frame(max=max(struct_info_rmsf$rmsf),mean=mean(struct_info_rmsf$rmsf)))
+}
