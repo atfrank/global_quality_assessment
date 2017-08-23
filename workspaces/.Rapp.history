@@ -116,3 +116,19 @@ min_nslrs
 load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_FALSE.RData")
 min_nslrs
 round(min_nslrs, 3)
+load("/Users/atfrank/Documents/GitSoftware/global_quality_assessment/workspaces/workspace_wt_1_correct_FALSE.RData")
+ls()
+sm_average_mean
+4/5
+sm_conf_mean
+sm_all_mean
+sm_average_ramsey
+sm_conf_ramsey
+sm_conf_all
+sm_all_ramsey
+sm_all_larmord
+sm_all_larmord
+sm_all_larmord
+sm_conf_larmord
+sm_aver_larmord
+sm_average_larmord
