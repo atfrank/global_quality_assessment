@@ -1,4 +1,4 @@
-initialize_analysis <- function(pairs, correct_shifts=FALSE, workdir="~/GitSoftware/global_quality_assessment/"){
+initialize_analysis <- function(pairs, correct_shifts=FALSE, workdir="~/Documents/GitHub/global_quality_assessment/"){
   # initialize data and variables need for analysis
   # goto analysis directory
   setwd(workdir)
@@ -528,7 +528,7 @@ make_error_barplot <- function(pairs=c("1R2P_2LPS", "2FRL_2M22", "2H2X_2M21", "2
     mid2 <- mean(c(x0s[2], x1s[2]))
     mid3 <- mean(c(x0s[1], x1s[2]))
     ypos1 <- max(errors$error)+0.05
-    ypos2 <- ypos1+0.1
+    ypos2 <- ypos1+0.2
     
     text( x = mid1, y = ypos1, labels = lab1, cex = 1.5)
     text( x = mid2, y = ypos1, labels = lab2, cex = 1.5)
@@ -581,10 +581,10 @@ make_nslr_plots <- function(m, labels=NULL, figfile="test.pdf"){
   data$label <- as.factor(c(rep("A",5),rep("B",5),rep("C",5)))
   par(lwd=3,mfrow=c(2,2),mgp=c(1.6, 0.4, 0),tcl=-0.3,oma=c(0.1,0.2,0.2,0.2),cex=1.5)
   barplot(t(as.matrix(m)), beside = TRUE, col = cols, las=2, ylim=c(0,1),  names.arg=labels)
-  abline(h=random_nslr(20,40),lwd="2",lty="dashed")
-  abline(h=mean(as.matrix(m)[,1]),lwd="2",lty="dashed",col=cols[1])
-  abline(h=mean(as.matrix(m)[,2]),lwd="2",lty="dashed",col=cols[2])
-  abline(h=mean(as.matrix(m)[,3]),lwd="2",lty="dashed",col=cols[3])
+  #abline(h=random_nslr(20,40),lwd="2",lty="dashed")
+  #abline(h=mean(as.matrix(m)[,1]),lwd="2",lty="dashed",col=cols[1])
+  #abline(h=mean(as.matrix(m)[,2]),lwd="2",lty="dashed",col=cols[2])
+  #abline(h=mean(as.matrix(m)[,3]),lwd="2",lty="dashed",col=cols[3])
   p <- boxplot(nslr~., data, ylim = c(0, 1),col=cols,names=c("proton","carbon","both"))
   abline(h=random_nslr(20,40),lwd="2",lty="dashed")
   dev.off()
@@ -642,7 +642,7 @@ summarize_tables <- function(predictor="larmord", error_type = "mae", averaged_d
   rownames(nslrs) <- names
   rownames(flags) <- names
   rownames(errors) <- names
-  return(list(nslrs, flags,errors))
+  return(list(nslrs, flags, errors))
 }
 
 get_nslr_only <- function(summary){
@@ -910,11 +910,12 @@ nuclei_importance <- function(pairs=c("1R2P_2LPS","2FRL_2M22","2H2X_2M21","2KFC_
   # see: 
   require(randomForest)
   t <- make_table_errors_nucleus(pairs, predictor, weight, error_type, outliers, nuclei)
+  print(t)
   data <- t[, !(colnames(t) %in% c("model", "id"))]
   data$reference_flag <- as.factor(data$reference_flag)
   names <- unlist(strsplit("reference_flag C1p C2p C3p C4p C5p C2 C5 C6 C8 H1p H2p H3p H4p H5p H5pp H2 H5 H6 H8", " "))
   colnames(data) <- names
-  rf <- randomForest(formula = reference_flag~., data = data, na.action = na.exclude)
+  rf <- randomForest(formula = reference_flag~., data = data, na.action = na.exclude, ntree=1000)
   varImpPlot(rf)
   return(rf)
 }
@@ -1138,14 +1139,14 @@ plot_errors_structural_differences <- function(pair_name, ref_model, comp_model,
   # read in average chemical shifts data
   
   if (!average){
-    errors <- get_residue_errors(paste("~/GitSoftware/global_quality_assessment/data/chemical_shifts_", pair_name, ".txt", sep = ""), prediction_method = "mean", weight = 1, outliers = outliers, error_type = "mae")
+    errors <- get_residue_errors(paste("~/Documents/GitHub/global_quality_assessment/data/chemical_shifts_", pair_name, ".txt", sep = ""), prediction_method = "mean", weight = 1, outliers = outliers, error_type = "mae")
   } else {
-    errors <- get_residue_errors(paste("~/GitSoftware/global_quality_assessment/data/chemical_shifts_", pair_name, "_average.txt", sep = ""), prediction_method = "mean", weight = 1, outliers = outliers, error_type = "mae")
+    errors <- get_residue_errors(paste("~/Documents/GitHub/global_quality_assessment/data/chemical_shifts_", pair_name, "_average.txt", sep = ""), prediction_method = "mean", weight = 1, outliers = outliers, error_type = "mae")
   }
   
   # read in local RMSD data
-  struct_info_rmsd <- read.table(paste("~/GitSoftware/global_quality_assessment/spath/scratch/", tolower(pair_name), "_compare.txt", sep = ""), col.names = c("name", "id", "resid", "rmsd"))
-  struct_info_rmsf <- read.table(paste("~/GitSoftware/global_quality_assessment/spath/scratch/rmsf_",pair_name, ".txt", sep = ""), col.names = c("name", "id", "resid", "rmsf"))
+  struct_info_rmsd <- read.table(paste("~/Documents/GitHub/global_quality_assessment/spath/scratch/", tolower(pair_name), "_compare.txt", sep = ""), col.names = c("name", "id", "resid", "rmsd"))
+  struct_info_rmsf <- read.table(paste("~/Documents/GitHub/global_quality_assessment/spath/scratch/rmsf_",pair_name, ".txt", sep = ""), col.names = c("name", "id", "resid", "rmsf"))
   struct_info <- merge(struct_info_rmsd, struct_info_rmsf, by = c("resid"))
   
   # merge based on resid
@@ -1167,6 +1168,184 @@ plot_errors_structural_differences <- function(pair_name, ref_model, comp_model,
 
 mean_rmsf <- function(pair_name){
   # read in local RMSD data
-  struct_info_rmsf <- read.table(paste("~/GitSoftware/global_quality_assessment/spath/scratch/rmsf_",pair_name, ".txt", sep = ""), col.names = c("name", "id", "resid", "rmsf"))
+  struct_info_rmsf <- read.table(paste("~/Documents/GitHub/global_quality_assessment/spath/scratch/rmsf_",pair_name, ".txt", sep = ""), col.names = c("name", "id", "resid", "rmsf"))
   return(data.frame(max=max(struct_info_rmsf$rmsf),mean=mean(struct_info_rmsf$rmsf)))
+}
+
+
+analysis_electo <- function(pairs){
+  # function to analyze electio weights
+  electio_list <- list()
+  nslrs <- NULL
+  for (i in seq_along(pairs$pair)){
+    pair <- pairs$pair[i]
+    ref <- pairs$ref[i]
+    pair_name <- pairs$pair_name[i]
+    threshold <- pairs$threshold[i]
+    file <- paste("electio_selections/", pair_name, ".txt",sep = "")
+    electio <- read.table(file, col.names = c("model", "weight"))
+    electio$flag <- 0
+    electio$flag[electio$model > threshold] <- 1
+    electio <- electio[, c("model", "flag", "weight")]
+    file <- paste("electio_selections/", pair_name, "_flagged.txt",sep = "")
+    write.table(electio, file = file, quote = FALSE, col.names = FALSE, row.names = FALSE)
+    electio <- electio[order(electio$weight, decreasing = TRUE), ]
+    electio_list[[i]] <- electio
+    nslrs <- c(nslrs, nmR::nslr(electio$flag))
+  }
+  return(list(electio_list, data.frame(pair=pairs$pair, nslrs)))
+}
+
+clean_data <- function(cs){
+  cs_clean <- NULL
+  for (rna in unique(cs$id)){
+    if(is.null(cs_clean)){
+      cs_clean <- remove_outliers(cs = subset(cs, id == rna), threshold = 4)
+    } else {
+      cs_clean <- rbind(cs_clean, remove_outliers(cs = subset(cs, id == rna), threshold = 4))
+    }
+  }
+  return(cs_clean)
+}
+
+
+get_errors <- function(pairfile, nucleus_group = "both", prediction_method = "larmord", weight = 1, error_type = "rmse", conformational_averaging = FALSE, outliers = "none", nuclei = NULL){
+  # function to compute the resolving scores (i.e., the NSLR) for one of the test (i.e., chemical shifts in th pairfile) present in the manuscript
+  # 
+  library(nmR)
+  library(plyr)
+  # read in shifts
+  cs <- read.table(paste("data/",pairfile, sep=""), header = T)
+  outfile <- paste(paste("errors/",nucleus_group, sep=""), prediction_method, error_type, weight, outliers, pairfile, sep="_")
+  
+  # select subset
+  if (nucleus_group=="proton" || nucleus_group=="carbon"){
+    cs <- subset(cs, type == nucleus_group)
+  } else {
+    nucleus_group <- "both"
+  }
+  
+  # additional filtering
+  if(!is.null(nuclei)){
+    cs <- cs[(as.character(cs$nucleus) %in% nuclei) ,]
+  }
+  
+  # set weight
+  if (prediction_method=="larmord"){
+    cs$predCS <- cs$larmord_predCS
+    if (weight==1){
+      cs$weight <- 1/cs$weight_larmord_1
+    } 
+    if (weight==2){
+      cs$weight <- 1/cs$weight_larmord_1
+    } 
+    if (c("sensi_larmord") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_larmord)*cs$weight_larmord_1
+      } 
+      if (weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_larmord)*cs$weight_larmord_2
+      } 
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_larmord)/cs$weight_larmord_1
+      } 
+      if (weight==6){
+        cs$weight <- sqrt(cs$sensi_larmord)/cs$weight_larmord_2
+      } 
+      
+    }
+  }
+  if (prediction_method=="ramsey"){
+    cs$predCS <- cs$ramsey_predCS
+    if (weight==1){
+      cs$weight <- 1/cs$weight_ramsey_1
+    } 
+    if (weight==2){
+      cs$weight <- 1/cs$weight_ramsey_1
+    } 
+    if (c("sensi_ramsey") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_ramsey)*cs$weight_ramsey_1
+      } 
+      if (weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_ramsey)*cs$weight_ramsey_2
+      } 
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_ramsey)/cs$weight_ramsey_1
+      } 
+      if (weight==6){
+        cs$weight <- sqrt(cs$sensi_ramsey)/cs$weight_ramsey_2
+      } 
+      
+    }
+  }
+  if (prediction_method=="mean"){
+    cs$predCS <- (cs$ramsey_predCS + cs$larmord_predCS)/2
+    if (weight==1){
+      cs$weight <- 1/((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+    } 
+    if(weight==2){
+      cs$weight <- 1/((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+    }
+    if (c("sensi_mean") %in% colnames(cs)){
+      if (weight==3){
+        cs$weight <- 1/sqrt(cs$sensi_mean)*((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+      } 
+      if(weight==4){
+        cs$weight <- 1/sqrt(cs$sensi_mean)*((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+      }
+      if (weight==5){
+        cs$weight <- sqrt(cs$sensi_mean)/((cs$weight_ramsey_1 + cs$weight_larmord_1)/2)
+      } 
+      if(weight==6){
+        cs$weight <- sqrt(cs$sensi_mean)/((cs$weight_ramsey_2 + cs$weight_larmord_2)/2)
+      }
+    }
+  }
+  
+  if (conformational_averaging){
+    cs <- ddply(.dat=cs, .var=c("resid","resname","nucleus","expCS","weight","reference_flag","type"), .fun=function(x){mean(x$predCS)})
+    cs$model <- cs$reference_flag
+    cs$predCS <- cs$V1
+  }
+  
+  # remove outliers
+  if(outliers != "none"){cs <- remove_outliers(cs, outliers)}
+  
+  if (error_type=="rmse"){
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag"), .fun=score_rmse)
+  }
+  if (error_type=="mae") {
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag"), .fun=score_mae)
+  }
+  if (error_type=="geo_mae") {
+    errors <- ddply(.dat=cs, .var=c("model","reference_flag"), .fun=score_geo_mae)
+  }
+  if (error_type=="tau") {
+    tmp <- ddply(.dat=cs, .var=c("model","reference_flag", "type"), .fun=correlation_kendall)
+    tmp$weight <- tmp$N/sum(tmp$N)
+    errors <- ddply(.dat=tmp, .var=c("model","reference_flag"), .fun=function(x){sum(tmp$weight*x$cor)})
+  }
+  if (error_type=="r") {
+    tmp <- ddply(.dat=cs, .var=c("model","reference_flag", "type"), .fun=correlation_pearson)
+    tmp$weight <- tmp$N/sum(tmp$N)
+    errors <- ddply(.dat=tmp, .var=c("model","reference_flag"), .fun=function(x){sum(tmp$weight*x$cor)})
+  }
+  if (error_type=="rho") {
+    tmp <- ddply(.dat=cs, .var=c("model","reference_flag", "type"), .fun=correlation_spearman)
+    tmp$weight <- tmp$N/sum(tmp$N)
+    errors <- ddply(.dat=tmp, .var=c("model","reference_flag"), .fun=function(x){sum(tmp$weight*x$cor)})
+  }
+  
+  colnames(errors) <- c("model","flag","error")
+  write.table(errors,outfile,col.names=TRUE, quote=FALSE, row.names=FALSE)
+  
+  if (error_type %in% c("mae","rmse","geo_mae")){
+    errors <- errors[order(errors$error, decreasing = FALSE),]
+  } else {
+    errors <- errors[order(errors$error, decreasing = TRUE),]
+  }
+  
+  
+  return(errors)
 }

@@ -2,7 +2,7 @@
 rm(list = ls())
 
 # goto working directory
-setwd("~/GitSoftware/global_quality_assessment/")
+setwd("~/Documents/GitHub/global_quality_assessment/")
 
 # load user functions
 source("library.R")
@@ -19,7 +19,7 @@ main_manuscript <- function(){
     for (wt in 1:2){
       # variables for outlier analysis
       min_nslrs <- NULL
-      thresholds <- c(1:30, "none")
+      thresholds <- c(1:10, "none")
       # Errors determined using average structure
       sm_average_mean <- summarize_tables("mean","mae", TRUE, FALSE, FALSE, names=pair_names, weight = wt )
       sm_average_larmord <- summarize_tables("larmord","mae", TRUE, FALSE, FALSE, names=pair_names, weight = wt)

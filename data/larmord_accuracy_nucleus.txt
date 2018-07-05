@@ -1,3 +1,4 @@
+nucleus weight
 C1' 0.856
 C2 0.733
 C2' 0.532

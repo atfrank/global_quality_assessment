@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [[ $# -ne 2 ]] 
+then
+    echo "script to run Electio for paper"
+    echo "usage: $0 <oldPDBID> <newPDBID>"
+else
+    source ~/.bashrc
+    oldPDBID=$1
+    newPDBID=$2
+
+    # make data ready for running electio
+    electio_prep --accuracyfile data/larmord_accuracy_resname_nucleus.txt --observed_vector_filename data/observed_electio_vector_${oldPDBID}_${newPDBID}.txt --predicted_matrix_filename data/predicted_matrix_${oldPDBID}_${newPDBID}.txt --weights_vector_filename data/weights_vector_${oldPDBID}_${newPDBID}.txt reference_errors/${newPDBID}/chemical_shifts_corrected_larmord.txt data/larmord_${oldPDBID}_${newPDBID}.txt
+
+    # run electio with weights
+    # in this mode, supplied weights are used to compute fitness during selection
+    electio --ga_populations 40 --ga_cycles 10000 --ga_monitor --ga_weights data/weights_vector_${oldPDBID}_${newPDBID}.txt --output electio_selections/${oldPDBID}_${newPDBID}.txt data/observed_electio_vector_${oldPDBID}_${newPDBID}.txt data/predicted_matrix_${oldPDBID}_${newPDBID}.txt
+fi
