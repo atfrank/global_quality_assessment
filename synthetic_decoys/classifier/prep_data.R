@@ -11,5 +11,10 @@ cs <- merge(expcs, cs, by = c("resname", "resid", "nucleus", "id"))
 cs$flag <- 0
 cs$flag[cs$rmsd < 3 ] <- 1
 
-# save
+# get error matrices
+errors <- plyr::ddply(.dat=cs, .var=c("model","flag", "rmsd", "id", "resname", "nucleus"), .fun=nmR::score_mae)
+errors <- plyr::ddply(.dat=errors, .var=c("id"), .fun = get_error_matrices)
+
+# save data
 save(cs, file = "chemical_shifts.RData")
+save(errors, file = "error_matrices.RData")
