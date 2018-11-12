@@ -1,0 +1,106 @@
+Best: 0.852273 using {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'Adam'}
+0.814848 (0.013214) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'Adam'}
+0.796818 (0.011896) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'RMSprop'}
+0.807121 (0.005841) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'Adam'}
+0.793333 (0.016587) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'RMSprop'}
+0.817424 (0.014197) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'Adam'}
+0.798333 (0.014241) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'RMSprop'}
+0.798485 (0.008060) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'Adam'}
+0.799848 (0.009706) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'RMSprop'}
+0.799091 (0.009812) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'Adam'}
+0.804545 (0.008201) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'RMSprop'}
+0.802576 (0.010932) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'Adam'}
+0.806364 (0.008040) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'RMSprop'}
+0.829091 (0.010057) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'Adam'}
+0.831515 (0.011820) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'RMSprop'}
+0.841515 (0.010202) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'Adam'}
+0.841970 (0.007779) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'RMSprop'}
+0.845606 (0.011740) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'Adam'}
+0.845000 (0.011984) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'RMSprop'}
+0.823636 (0.009963) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'Adam'}
+0.826061 (0.007035) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'RMSprop'}
+0.837424 (0.007882) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'Adam'}
+0.837879 (0.012522) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'RMSprop'}
+0.840303 (0.007567) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'Adam'}
+0.843788 (0.010782) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'RMSprop'}
+0.822273 (0.011624) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'Adam'}
+0.802424 (0.015654) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'RMSprop'}
+0.821212 (0.004791) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'Adam'}
+0.815152 (0.005138) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'RMSprop'}
+0.816667 (0.007454) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'Adam'}
+0.804697 (0.018848) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'RMSprop'}
+0.810455 (0.012940) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'Adam'}
+0.816515 (0.010469) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'RMSprop'}
+0.821667 (0.010731) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'Adam'}
+0.826212 (0.009566) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'RMSprop'}
+0.827879 (0.008304) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'Adam'}
+0.823333 (0.006291) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'RMSprop'}
+0.831061 (0.006210) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'Adam'}
+0.840606 (0.006385) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'RMSprop'}
+0.842424 (0.005463) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'Adam'}
+0.846061 (0.007922) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'RMSprop'}
+0.847879 (0.010534) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'Adam'}
+0.840606 (0.009661) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'RMSprop'}
+0.841212 (0.008712) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'Adam'}
+0.850303 (0.014088) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'RMSprop'}
+0.846364 (0.010359) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'Adam'}
+0.846667 (0.011405) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'RMSprop'}
+0.852273 (0.008354) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'Adam'}
+0.848333 (0.010270) with: {'activation': 'relu', 'batch_size': 128, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'RMSprop'}
+0.821061 (0.002598) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'Adam'}
+0.811212 (0.014305) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'RMSprop'}
+0.826364 (0.011573) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'Adam'}
+0.818333 (0.013631) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'RMSprop'}
+0.823030 (0.007385) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'Adam'}
+0.817121 (0.012032) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'RMSprop'}
+0.785303 (0.004635) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'Adam'}
+0.792273 (0.005915) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'RMSprop'}
+0.792576 (0.005408) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'Adam'}
+0.793636 (0.006203) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'RMSprop'}
+0.790000 (0.005257) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'Adam'}
+0.796364 (0.006199) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'RMSprop'}
+0.843030 (0.008853) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'Adam'}
+0.838333 (0.010699) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'RMSprop'}
+0.845152 (0.013925) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'Adam'}
+0.846818 (0.014425) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'RMSprop'}
+0.845455 (0.016577) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'Adam'}
+0.849242 (0.008925) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'RMSprop'}
+0.821970 (0.007666) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'Adam'}
+0.817273 (0.008318) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'RMSprop'}
+0.825455 (0.013083) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'Adam'}
+0.829697 (0.009551) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'RMSprop'}
+0.827879 (0.006867) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'Adam'}
+0.835303 (0.009236) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 25, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'RMSprop'}
+0.826212 (0.011781) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'Adam'}
+0.813939 (0.011926) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'RMSprop'}
+0.820152 (0.008335) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'Adam'}
+0.822727 (0.011863) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'RMSprop'}
+0.822424 (0.009298) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'Adam'}
+0.828030 (0.008730) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'RMSprop'}
+0.802121 (0.009345) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'Adam'}
+0.806212 (0.011513) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'RMSprop'}
+0.807424 (0.010089) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'Adam'}
+0.809848 (0.010735) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'RMSprop'}
+0.810152 (0.011703) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'Adam'}
+0.813182 (0.009409) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.1, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'RMSprop'}
+0.838788 (0.012200) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'Adam'}
+0.835000 (0.007506) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 24, 'opt': 'RMSprop'}
+0.845758 (0.011161) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'Adam'}
+0.843485 (0.010405) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 36, 'opt': 'RMSprop'}
+0.845606 (0.005934) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'Adam'}
+0.848182 (0.012491) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.01, 'neurons': 48, 'opt': 'RMSprop'}
+0.828182 (0.008905) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'Adam'}
+0.835303 (0.011624) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 24, 'opt': 'RMSprop'}
+0.840000 (0.009503) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'Adam'}
+0.844545 (0.010225) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 36, 'opt': 'RMSprop'}
+0.841970 (0.008498) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'Adam'}
+0.846970 (0.009498) with: {'activation': 'relu', 'batch_size': 256, 'epochs': 50, 'init': 'normal', 'l2': 0.01, 'loss': 'binary_crossentropy', 'lr': 0.001, 'neurons': 48, 'opt': 'RMSprop'}
+             precision    recall  f1-score   support
+
+          0       0.84      0.86      0.85        42
+          1       0.89      0.88      0.89        58
+
+avg / total       0.87      0.87      0.87       100
+
+[[36  6]
+ [ 7 51]]
