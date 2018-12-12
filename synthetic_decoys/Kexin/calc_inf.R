@@ -10,3 +10,4 @@ sort_inf_files <- function(rnas, inf_path = "INF/", rewrite = FALSE){
     }
   }
 }
+
