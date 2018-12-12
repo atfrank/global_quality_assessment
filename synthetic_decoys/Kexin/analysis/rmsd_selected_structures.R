@@ -20,12 +20,3 @@ for(i in 1:67){
   merged = merge(cs_errors, pred, by=c("id","model"))
   selected_models[i,3] = merged[which.max(merged$score), "rmsd"]
 }
-for(i in 1:67){
-  rna = rnas[i]
-  cs_errors = subset(errors, id==rna)
-  cs_errors = cs_errors[,c("id","model","rmsd")]
-  pred = read.table(paste0("ERT_classifier/pred/ert_test_predscore_",rna,"_3.0.txt"),header = T)
-  #selected_models[i,1] = rna
-  merged = merge(cs_errors, pred, by=c("id","model"))
-  selected_models[i,4] = merged[which.max(merged$score), "rmsd"]
-}
