@@ -112,18 +112,17 @@ calc_DI <- function(rnas, inf_path){
   }
   errors_merged = merge(errors, inf_all, by = c("id","model"))
   errors_merged$DI = errors_merged$rmsd/errors_merged$inf_all
+  return(errors_merged)
 }
 
 # still working on it
-calc_rmsd_of_selected_structures <- function(rnas, nmethods = 3, file_path){
-  selected_models = matrix(NA, len(rnas), nmethods)
-  for(i in 1:len(rnas)){
-    rna = rnas[i]
+calc_rmsd_of_selected_structures <- function(rnas, file_path, errors){
+  for(rna in rnas){
     cs_errors = subset(errors, id==rna)
     cs_errors = cs_errors[,c("id","model","rmsd")]
     pred = read.table(paste0(file_path, rna,"_3.0.txt"), header = T)
-    #selected_models[i,1] = rna
     merged = merge(cs_errors, pred, by=c("id","model"))
-    selected_models[i,3] = merged[which.max(merged$score), "rmsd"]
+    selected = merged[which.max(merged$score), "rmsd"]
   }
+  return(selected)
 }
