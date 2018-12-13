@@ -115,7 +115,6 @@ calc_DI <- function(rnas, inf_path){
   return(errors_merged)
 }
 
-# still working on it
 calc_rmsd_of_selected_structures <- function(rnas, file_path, errors){
   for(rna in rnas){
     cs_errors = subset(errors, id==rna)
