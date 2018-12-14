@@ -61,9 +61,9 @@ def main():
   max_features = ['sqrt', 'log2', None, ]
  
   # grid search cv 
-  rf = RandomForestRegressor(oob_score = True, verbose = 1)
+  rf = RandomForestRegressor(oob_score = True, verbose = 2)
   param_grid = dict(n_estimators = n_estimators, min_samples_split = min_samples_split, bootstrap = bootstrap, max_features = max_features)
-  clf = GridSearchCV(estimator=rf, param_grid=param_grid, cv=5, n_jobs=4, 
+  clf = GridSearchCV(estimator=rf, param_grid=param_grid, cv=5, n_jobs=16, 
                      return_train_score=True, scoring='neg_mean_absolute_error', verbose = 2)
   grid_result = clf.fit(X_train,y_train)
   
@@ -73,7 +73,7 @@ def main():
   params = grid_result.cv_results_['params']
   logfile = DIR_PATH+'tree_based/log/DI_rf_rg_log_'+rna+'.txt'
   with open(logfile, 'a') as f:
-    print("OOB score: %f" % (clf.best_estimator_.oob_score_), file=f)
+    #print("OOB score: %f" % (clf.best_estimator_.oob_score_), file=f)
     print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_), file=f)
     for mean, stdev, param in zip(means, stds, params):
       print("%f (%f) with: %r" % (mean, stdev, param), file=f)
@@ -92,7 +92,7 @@ def main():
   
   # save best model
   best_model = clf.best_estimator_
-  modelname = DIR_PATH + 'models/DI_rf_rg_model_'+rna+'.sav'
+  modelname = DIR_PATH + 'tree_based/models/DI_rf_rg_model_'+rna+'.sav'
   pickle.dump(best_model, open(modelname, 'wb'))
   
 if __name__ == "__main__":
