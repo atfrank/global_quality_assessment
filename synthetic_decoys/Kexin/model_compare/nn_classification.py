@@ -101,7 +101,7 @@ def main():
   grid_result = clf_cv.fit(X_train,y_train)
 
   # write log file for neural network information
-  logfile = DIR_PATH+'model_compare/log/nnclf'+rna+'_'+str(m)+'.txt'
+  logfile = DIR_PATH+'model_compare/log/nnclf_'+rna+'_'+str(m)+'.txt'
   means = grid_result.cv_results_['mean_test_score']
   stds = grid_result.cv_results_['std_test_score']
   params = grid_result.cv_results_['params']
@@ -122,7 +122,7 @@ def main():
     print(classification_report(y_test, y_pred_test), file=f)
     print(confusion_matrix(y_test, y_pred_test), file=f)
     print("score is: %f" % best_model.score(X_test,y_test), file=f)
-  test_result.to_csv(DIR_PATH + 'model_compare/pred/rfclf_'+rna+'_'+str(m)+'.txt', sep = ' ', index = False)
+  test_result.to_csv(DIR_PATH + 'model_compare/pred/nnclf_'+rna+'_'+str(m)+'.txt', sep = ' ', index = False)
 
 if __name__ == "__main__":
   main()

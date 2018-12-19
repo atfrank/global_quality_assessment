@@ -66,7 +66,7 @@ def main():
   class_weight = ['balanced_subsample', 'balanced', None]
   grid = dict(n_estimators = n_estimators, min_samples_split = min_samples_split,
   bootstrap = bootstrap, max_features = max_features, class_weight = class_weight)
-  ert_cv = GridSearchCV(ert, grid, cv = 5, verbose = 2, scoring = 'accuracy')
+  ert_cv = GridSearchCV(ert, grid, cv = 5, verbose = 2, scoring = 'accuracy', n_jobs = 6)
   grid_result = ert_cv.fit(X_train, y_train)
 
   logfile = DIR_PATH+'model_compare/log/ertclf_'+rna+'_'+str(m)+'.txt'
@@ -87,7 +87,7 @@ def main():
   with open(logfile, 'a') as f:
     print(classification_report(y_test, pred_binary), file=f)
     print(confusion_matrix(y_test, pred_binary), file=f)
-    print("R^2 value is: %f" % score(X_test,y_test), file=f)
+    print("R^2 value is: %f" % best_model.score(X_test,y_test), file=f)
   test_result.to_csv(DIR_PATH + 'model_compare/pred/ertclf_'+rna+'_'+str(m)+'.txt', sep = ' ', index = False)
 
 if __name__ == "__main__":

@@ -164,6 +164,7 @@ H6URA       -0.5433    0.0414  -13.1127  0.0000  -0.6245  -0.4621
   with open(logfile, 'a') as f:
     print(classification_report(y_test, pred_binary), file=f)
     print(confusion_matrix(y_test, pred_binary), file=f)
+    print("R^2 value is: %f" % best_model.score(X_test,y_test), file=f)    
   test_result.to_csv(DIR_PATH + 'model_compare/pred/logit_'+rna+'_'+str(m)+'.txt', sep = ' ', index = False)
 if __name__ == "__main__":
   main()
