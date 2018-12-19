@@ -119,8 +119,8 @@ def main():
   test_result['pred_proba'] = pred_proba
   # print confusion matrix
   with open(logfile, 'a') as f:
-    print(classification_report(y_test, y_pred_test), file=f)
-    print(confusion_matrix(y_test, y_pred_test), file=f)
+    print(classification_report(y_test, pred_binary), file=f)
+    print(confusion_matrix(y_test, pred_binary), file=f)
     print("score is: %f" % best_model.score(X_test,y_test), file=f)
   test_result.to_csv(DIR_PATH + 'model_compare/pred/nnclf_'+rna+'_'+str(m)+'.txt', sep = ' ', index = False)
 

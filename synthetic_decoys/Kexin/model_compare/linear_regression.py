@@ -66,6 +66,10 @@ def main():
   test_result.loc[:,'pred'] = pred
   with open(logfile, 'a') as f:
     print("R^2 is: %f" % best_model.score(X_test, y_test), file = f)
+    print("coef:\n")
+    print(best_model.coef_.flatten(), file = f)
+    print("intercept:\n")
+    print(best_model.intercept_.flatten(), file = f)
   test_result.to_csv(DIR_PATH + 'model_compare/pred/lm_'+rna+'.txt', sep = ' ', index = False)
 if __name__ == "__main__":
   main()
