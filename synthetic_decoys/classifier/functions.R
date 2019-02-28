@@ -70,3 +70,41 @@ get_error_matrices <- function(errors, nuclei = c("C1'","C2'","C3'","C4'","C5'",
   if(remove_na){mat[is.na(mat)] <- 0}
   return(mat)
 }
+
+get_error_matrices_test <- function(errors, nuclei = c("C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8","H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8"), remove_na = FALSE){
+  # function to write out matrix of chemical shift errors
+  errors <- errors[errors$nucleus %in% nuclei, ]
+  tmp <- expand.grid(unique(errors$id), nuclei, "GUA")
+  tmp <- rbind(tmp, expand.grid(unique(errors$id), nuclei, "ADE"))
+  tmp <- rbind(tmp, expand.grid(unique(errors$id), nuclei, "CYT"))
+  tmp <- rbind(tmp, expand.grid(unique(errors$id), nuclei, "URA"))  
+  colnames(tmp) <- c("id", "nucleus","resname")
+  cnames <- gsub("\'","p",unique(paste(tmp$nucleus, tmp$resname, sep="")))
+  errors <- merge(errors, tmp, all = TRUE)
+  errors <- errors[order(errors$id, errors$nucleus, errors$resname), ]  
+  mat <- matrix(errors$V1, byrow = TRUE, ncol = length(cnames))
+  colnames(mat) <- cnames
+  if(remove_na){mat[is.na(mat)] <- 0}
+  return(mat)
+}
+
+prep_data_test <- function(expcs_file, predcs_file, rna = "2LPS", errors_file){
+  # read in data
+  rmsd <- read.table("../../data/rmsd_info", col.names = c("id", "model", "rmsd"), stringsAsFactors = F)
+  rmsd <- rmsd[grepl(rna, rmsd$model),]
+  predcs <- nmR::load_cs_data(csfile = predcs_file, accuracyFile = "data/larmord_accuracy_resname_nucleus.txt", atomBasedWeights = FALSE, names = c("id", "resid", "resname", "nucleus", "predCS", "model"))
+  expcs <-  nmR::load_cs_data(csfile = expcs_file, names = c("resname", "resid", "nucleus", "expCS", "error"))
+  
+  # merge
+  cs <- merge(predcs, rmsd, by = c("model","id"))
+  cs <- merge(expcs, cs, by = c("resname", "resid", "nucleus"))
+  cs$flag <- 0
+  cs$flag[cs$rmsd < 3] <- 1
+
+  # get error matrix
+  errors <- plyr::ddply(.dat=cs, .var=c("model","flag", "rmsd", "id", "resname", "nucleus"), .fun=nmR::score_mae)
+  errors <- plyr::ddply(.dat=errors, .var=c("id"), .fun = get_error_matrices_test)
+
+  # save data
+  write.table(errors, errors_file, col.names = T, row.names = F, quote = F)
+}
