@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # script to add new data to reference error
-rnas="5KQE 5IEM 5LWJ 2RVO 5UZT 5UF3 5WQ1 5V17 5V16 5KH8 5LSN 6EZ0 5N5C"
+rnas="2MIY 5KQE 5IEM 5LWJ 2RVO 5UZT 5UF3 5WQ1 5V17 5V16 5KH8 5LSN 6EZ0 5N5C"
+rnas="2MIY"
 for rna in $rnas
 do
     rm -rf ${rna}/

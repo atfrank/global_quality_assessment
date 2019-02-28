@@ -109,7 +109,7 @@ get_importance_by_nuclei <- function(f, nuclei="C1'", method="larmord", ntree = 
 get_importance_by_nuclei_all <- function(f, methods = c("consensus","larmord","ramsey"), nuclei = c("C1'","C2'","C3'","C4'","C5'","C2","C5","C6","C8","H1'","H2'","H3'","H4'","H5'","H5''","H2","H5","H6","H8"), ntree = 100, verbose = TRUE){
   for (method in methods){
     for (nucleus in nuclei){
-      rfname <- paste("predictive_model_", nucleus, "_", method, ".RData", sep = "")
+      rfname <- paste("predicrftive_model_", nucleus, "_", method, ".RData", sep = "")
       rf <- get_importance_by_nuclei(f, nucleus, method, ntree, verbose)
       save(rf, file = rfname)
     }
@@ -128,6 +128,7 @@ summarize_importance_by_nuclei_all <- function(methods = c("consensus","larmord"
     }
     #print(round(mat, 3))
     mat <- matrix(as.numeric(mat), ncol = ncol(mat), byrow = FALSE)
+    
     #print(round(mat, 3))
     means <- rowMeans(mat)
     
