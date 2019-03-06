@@ -1,4 +1,4 @@
-HEADER    NOLB output, run on kx628.local on Tue Mar  5 11:12:15 2019
+HEADER    NOLB output, run on 0587369937.wireless.umich.net on Fri Jun 29 11:18:06 2018
 REMARK    Command-line arguments: NOLB pdb_files/4A4T.pdb -s 100 --rmsd 5 --dist 1 -m 
 REMARK    Please cite: Alexandre Hoffmann & Sergei Grudinin. NOLB : Non-linear rigid block normal mode analysis method. Journal of Chemical Theory and Computation, 2017, 13 (5), pp.2123-2134. DOI: 10.1021/acs.jctc.7b00197.
 REMARK    visit https://team.inria.fr/nano-d/software/nolb-normal-modes
