@@ -63,7 +63,7 @@ plot(rf_fit, main = "random forest")
 dev.off()
 sink("log.txt")
 cat("Best params for RF:\n")
-cat(paste(names(rf_fit$bestTune), rf_fit$bestTune, sep = ":", collapse = ","), log)
+cat(paste(names(rf_fit$bestTune), rf_fit$bestTune, sep = ":", collapse = ","))
 sink()
 
 # extraTrees 
@@ -80,7 +80,7 @@ plot(et_fit, main = "extra trees")
 dev.off()
 sink("log.txt")
 cat("Best params for ERT:\n")
-cat(paste(names(et_fit$bestTune), et_fit$bestTune, sep = ":", collapse = ","), log)
+cat(paste(names(et_fit$bestTune), et_fit$bestTune, sep = ":", collapse = ","))
 sink()
 
 # xgboost
@@ -96,7 +96,7 @@ plot(gbm_fit, main = "xgboost")
 dev.off()
 sink("log.txt")
 cat("Best params for XGBoost:\n")
-cat(paste(names(gbm_fit$bestTune), gbm_fit$bestTune, sep = ":", collapse = ","), log)
+cat(paste(names(gbm_fit$bestTune), gbm_fit$bestTune, sep = ":", collapse = ","))
 sink()
 
 # make predictions using three models
