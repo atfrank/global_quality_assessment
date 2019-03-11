@@ -21,11 +21,12 @@ errors <- plyr::ddply(.dat=cs, .var=c("model", "rmsd", "id", "resname", "nucleus
 errors <- plyr::ddply(.dat=errors, .var=c("id"), .fun = get_error_matrices)
 
 # save
-save(cs, file = "data/chemical_shifts.RData")
-save(errors, file = "error_matrix_unweighted.RData")
+save(cs, file = "error_files/chemical_shifts.RData")
+save(errors, file = "error_files/error_matrix_unweighted.RData")
 
-predcs2 <- nmR::load_cs_data(csfile="chemical_shift_files/all.txt", accuracyFile = "data/larmord_accuracy_resname_nucleus.txt", atomBasedWeights = FALSE, names = c("id", "resid", "resname", "nucleus", "predCS", "model"))
-cs2 <- merge(predcs2, rmsd, by = c("model","id"))
-cs <- merge(expcs, cs2, by = c("resname","resid","nucleus","id"))
-errors <- plyr::ddply(.dat=cs, .var=c("model", "rmsd", "id", "resname", "nucleus"), .fun=nmR::score_mae)
-errors <- plyr::ddply(.dat=errors, .var=c("id"), .fun = get_error_matrices)
+#predcs2 <- nmR::load_cs_data(csfile="chemical_shift_files/all.txt", accuracyFile = "data/larmord_accuracy_resname_nucleus.txt", atomBasedWeights = FALSE, names = c("id", "resid", "resname", "nucleus", "predCS", "model"))
+#cs2 <- merge(predcs2, rmsd, by = c("model","id"))
+#cs2 <- merge(expcs, cs2, by = c("resname","resid","nucleus","id"))
+#errors <- plyr::ddply(.dat=cs2, .var=c("model", "rmsd", "id", "resname", "nucleus"), .fun=nmR::score_mae)
+#errors <- plyr::ddply(.dat=errors, .var=c("id"), .fun = get_error_matrices)
+#save(errors, file = "error_files/error_matrix_weighted.RData")
