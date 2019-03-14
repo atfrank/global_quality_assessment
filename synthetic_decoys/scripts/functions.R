@@ -114,3 +114,40 @@ prep_data_test <- function(expcs_file, predcs_file, rna = "2LPS", errors_file){
   # save data
   write.table(errors, errors_file, col.names = T, row.names = F, quote = F)
 }
+
+score_sequence_similarity <- function(similarity_file = "sequence_similarity.txt", rnas){
+  ###########################################################################################
+  # prepare input sequence similarity file:                                                 #
+  # vsearch --allpairs_global fasta.txt --iddef 0 --id 0 --alnout output.aln                #
+  # grep 'PDB' output.aln > tmp.txt                                                         #
+  # sed '/nt/d' ./tmp.txt > output.txt                                                      #
+  ###########################################################################################
+  library(stringr)
+  # read in vsearch output
+  data <- read.table(similarity_file, fill = T, header = F)
+  data$V3 <- gsub("[[:space:]]", "", str_replace_all(gsub("*:A|PDBID|CHAIN|SEQUENCE","",as.character(data$V3)), "[^[:alnum:]]", " "))
+  data$V1 <- as.character(data$V1)
+  
+  # construct half similarity matrix
+  M <- matrix(NA, length(rnas), length(rnas))
+  query_rnas <- NULL
+  colnames(M) <- rnas
+  rownames(M) <- rnas
+  for(i in 1:nrow(data)){
+    if(data$V1[i] == "Query"){
+      query_rna <- gsub("[^[:alnum:]]", "", gsub("*:A|PDBID|CHAIN|SEQUENCE","",data$V2[i]))
+      if(query_rna %in% rnas){
+        query_rnas <- c(query_rnas, query_rna)
+      }
+    } else{
+      if(data$V3[i] %in% rnas){M[rownames(M) == query_rna, data$V3[i]] <- data$V1[i]}
+    }
+  }
+  for(col in 1:ncol(M)){
+    M[,col] <- as.numeric(gsub("%", "", M[,col]))/100
+  }
+  
+  # complete M to a full matrix
+  M[lower.tri(M)] <- t(M)[lower.tri(M)]
+  diag(M) <- 1
+}
