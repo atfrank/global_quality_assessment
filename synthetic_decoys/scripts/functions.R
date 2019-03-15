@@ -115,7 +115,7 @@ prep_data_test <- function(expcs_file, predcs_file, rna = "2LPS", errors_file){
   write.table(errors, errors_file, col.names = T, row.names = F, quote = F)
 }
 
-score_sequence_similarity <- function(similarity_file = "sequence_similarity.txt", rnas){
+score_sequence_similarity <- function(similarity_file = "sequence_similarity.txt", rnas, threshold, output){
   ###########################################################################################
   # prepare input sequence similarity file:                                                 #
   # vsearch --allpairs_global fasta.txt --iddef 0 --id 0 --alnout output.aln                #
@@ -150,4 +150,14 @@ score_sequence_similarity <- function(similarity_file = "sequence_similarity.txt
   # complete M to a full matrix
   M[lower.tri(M)] <- t(M)[lower.tri(M)]
   diag(M) <- 1
+  
+  # create a list to store which rnas should be removed
+  x <- vector(mode = "list", length = length(rnas))
+  names(x) <- rnas
+  for(rna in rnas){
+    a = M[rownames(M)==rna, ]
+    remove = as.vector(names(a[a>0.8]))
+    x[[rna]] <- remove
+  }
+  save(x, file = output)
 }
