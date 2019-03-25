@@ -1,9 +1,8 @@
 # load errors matrices
+library(plyr)
+library(caret)
 errors <- get(load("error_files/error_matrix_unweighted.RData"))
 rnas <- unique(errors$id)
-
-# load sequence similarity list
-M <- get(load("sequence_files/remove_list_0.8.RData"))
 
 # normalize the error for each RNA (specificed by id) separately
 #errors <- ddply(.data = errors, .variables = c("id"), .fun = norm_errors)
@@ -14,8 +13,9 @@ errors <- as.data.frame(errors)
 errors <- errors[sample(1:nrow(errors)),]
 
 # make sure the reference_flag is a factor so that when used in randomForest will recognize this as a classification problem
-errors <- errors[!(errors$rmsd <= 3.5 & errors$rmsd >= 1.5), ]
-errors$flag <- ifelse(errors$rmsd < 2, 0, 1)
+#errors <- errors[!(errors$rmsd <= 3.5 & errors$rmsd >= 1.5), ]
+#errors$flag <- ifelse(errors$rmsd < 2, 0, 1)
+errors$flag <- ifelse(errors$rmsd < 3, 0, 1)
 errors$flag <- as.factor(errors$flag)
 
 
@@ -46,4 +46,5 @@ normalize <- function(x){
 errors <- ddply(.dat = errors, .var = "id", .fun = normalize)
 
 # save
-save(errors, "error_files/errors_unweighted_norm.RData")
+#save(errors, "error_files/errors_unweighted_norm.RData")
+write.table(errors, "error_files/errors_unweighted_normed.txt", col.names = T, row.names = F, quote = F)

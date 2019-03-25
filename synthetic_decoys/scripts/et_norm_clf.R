@@ -1,4 +1,4 @@
-setwd("~/documents/GitHub/global_quality_assessment/synthetic_decoys/")
+setwd("~/projects/global_quality_assessment/NEW/")
 options(java.parameters = "- Xmx1024m")
 library(caret)
 library(plyr)
@@ -10,7 +10,8 @@ args <- commandArgs(TRUE)
 
 
 # load in normalized error matrix
-errors <- get(load("error_files/errors_unweighted_norm.RData"))
+errors <- read.table("error_files/errors_unweighted_normed.txt", header = T)
+errors$flag <- as.factor(errors$flag)
 rnas <- as.character(unique(errors$id))
 
 # load sequence similarity list
@@ -23,11 +24,6 @@ print(rna)
 train <- errors[!errors$id %in% M[[rna]], ]
 #train$id <- NULL
 levels(train$flag) <- c("new","old") # Please use factor levels that can be used as valid R variable names.
-test <- errors[errors$id == rna, ]
-
-#inTraining <- createDataPartition(errors$flag, p = .75, list = FALSE)
-#training <- errors[inTraining,]
-#testing <- errors[-inTraining,]
 
 # balance training set
 train <- downSample(train[,colnames(train)!="flag"], train$flag)
@@ -50,19 +46,34 @@ system.time({et_fit = train(Class ~ ., data = train,
                metric = "ROC")})
 print(et_fit)
 
+# use GOOD decoys to center and scale all decoys
+#errors_raw <- read.table("error_files/error_matrix_unweighted.txt", header = T)
+#test <- subset(errors_raw, id == rna)
+#test <- test[, colnames(errors)[!colnames(errors) %in% c("flag")]]
+#test[is.na(test)] <- 0
+#test_in <- subset(test, rmsd < 1.5 | rmsd > 3.5)
+#test_in[, c("id","rmsd")] <- NULL
+#preProcValues <- preProcess(test_in, method = c("center", "scale"), na.remove = T)
+#test <- predict(preProcValues, test)
+
+
+# NOT FILTERING
+test <- subset(errors, id == rna)
+
+
 # predict 
 test$pred <- predict(et_fit, test)
 test$pred <- ifelse(test$pred == "new", 0, 1)
+test$pred <- as.factor(test$pred)
 proba <- predict(et_fit, test, type = "prob")
 test$prob <- proba[,2]
 
-test$pred <- as.factor(test$pred)
 test_score = as.vector(confusionMatrix(test$pred, test$flag)$byClass)
 cnames = names(confusionMatrix(test$pred, test$flag)$byClass)
 
 # write output 
-write.table(test[, c("id","rmsd","flag","pred","prob")], paste0("data/et_norm_clf_result_", rna, ".txt"), col.names = F, row.names = F, quote = F)
-write.table(data.frame(cnames, test_score), paste0("data/et_norm_clf_score_", rna, ".txt"), col.names = F, row.names = F, quote = F)
+write.table(test[, c("id","rmsd","flag","pred","prob")], paste0("data/et_unfiltered_clf_result_", rna, ".txt"), col.names = F, row.names = F, quote = F)
+write.table(data.frame(cnames, test_score), paste0("data/et_unfiltered_clf_score_", rna, ".txt"), col.names = F, row.names = F, quote = F)
 
 
 
