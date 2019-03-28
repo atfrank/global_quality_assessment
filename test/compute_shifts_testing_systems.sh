@@ -3,7 +3,7 @@ rnas="1R2P 2LPS 2N6Q 5KMZ 2H2X 2M21 2FRL 2M22 2KFC 2L1V"
 # download and split pdb 
 for rna in $rnas
 do
-  split_pdb.bash ${rna} model 0
+  split_pdb.bash ${rna} ${rna}_model 0
 done
 
 # combine old and new structures
