@@ -1,7 +1,7 @@
 # user function
 norm_errors <- function(errors){
   # normalizes the errors based on the mean
-  errors$total <- rowSums(errors[,!(colnames(errors) %in% c("id", "model", "reference_flag" ,"rmsd"))], na.rm = TRUE)
+  #errors$total <- rowSums(errors[,!(colnames(errors) %in% c("id", "model", "reference_flag" ,"rmsd"))], na.rm = TRUE)
   cols <- colnames(errors)[!(colnames(errors) %in% c("id", "model", "reference_flag","rmsd"))]
   for (col in cols){
     #errors[, col] <- errors[, col]/median(errors[, col])

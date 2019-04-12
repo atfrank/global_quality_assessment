@@ -1,0 +1,70 @@
+---
+title: "test_analysis"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### reproduce bar-plots in manuscript for testing data (weighted errors)
+```{r}
+setwd("~/documents/github/global_quality_assessment/")
+source("synthetic_decoys/scripts/functions.R")
+
+# read in rmsd file
+rmsd <- read.table("test/rmsd.txt", header = T)
+
+# read in larmord predicted shifts
+predcs <- nmR::load_cs_data(csfile = "test/all_computed_larmord.txt", accuracyFile = "data/larmord_accuracy_nucleus.txt", atomBasedWeights = F, names = c("id", "resid", "resname", "nucleus", "predCS", "model"))
+
+# read in larmord corrected observed shifts
+expcs <-  nmR::load_cs_data(csfile="test/all_measured_corrected.txt", names = c("id", "resname", "resid", "nucleus", "expCS", "error"))
+
+# merge
+cs <- merge(predcs, rmsd, by = c("model","id"))
+cs <- merge(expcs, cs, by = c("resname","resid","nucleus","id"))
+cs$weight <- 1
+# reproduct error in manuscript
+for(rna in c("2L1V","2LPS","2M21","2M22","5KMZ")){
+  x = subset(cs, id == rna)
+  cutoff = unique(x[x$rmsd == 0,"model"])
+  x_0 = x[x$model %in% c(cutoff:max(x$model)),]
+  x_1 = x[x$model %in% c(1:(cutoff-1)),]
+  print(paste0(rna," new: ",mean(plyr::ddply(.dat = x_0, .var = "model", .fun = nmR::score_mae)$V1)))
+  print(paste0(rna," old: ",mean(plyr::ddply(.dat = x_1, .var = "model", .fun = nmR::score_mae)$V1)))
+}
+```
+
+#### k-means
+
+```{r}
+errors <- plyr::ddply(.dat=cs, .var=c("model", "rmsd", "id", "resname", "nucleus"), .fun=nmR::score_mae)
+errors <- plyr::ddply(.dat=errors, .var=c("id"), .fun = get_error_matrices)
+print("unweighted errors")
+for(rna in c("2L1V","2LPS","2M21","2M22","5KMZ")){
+  x = subset(errors, id == rna)
+  x[is.na(x)] <- 0
+  clusters <- kmeans(x[,4:79], 2)
+  print(rna)
+  print(clusters$cluster)
+}
+norm_errors_new <- function(errors){
+  # normalizes the errors based on the mean
+  #errors$total <- rowSums(errors[,!(colnames(errors) %in% c("id", "model", "reference_flag" ,"rmsd"))], na.rm = TRUE)
+  cols <- colnames(errors)[!(colnames(errors) %in% c("id", "model", "reference_flag","rmsd"))]
+  for (col in cols){
+    #errors[, col] <- errors[, col]/median(errors[, col])
+    errors[, col] <- errors[, col]/median(errors[, col])
+  }
+  return(errors)
+}
+```
+
+```{r}
+sum_errors <- plyr::ddply(.dat = cs,.var = c("model","id"),.fun = function(x){sum(abs(x$predCS-x$expCS))/max(x$resid)})
+
+
+
+```

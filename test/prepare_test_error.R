@@ -36,13 +36,16 @@ errors <- errors[sample(1:nrow(errors)),]
 errors <- errors[,colSums(is.na(errors))<nrow(errors)]
 
 # fill in NA
-errors[is.na(errors)] <- 0
+#errors[is.na(errors)] <- 0
 
 # scale and center
-normalize <- function(x){
-  preProcValues <- preProcess(x[, !colnames(x) %in% c("id","rmsd","model")], method = c("center", "scale"), na.remove = T)
-  x_tf <- predict(preProcValues, x)
-  return(x_tf)
+#normalize <- function(x){
+#  preProcValues <- preProcess(x[, !colnames(x) %in% c("id","rmsd","model")], method = c("center", "scale"), na.remove = T)
+#  x_tf <- predict(preProcValues, x)
+#  return(x_tf)
+#}
+errors <- ddply(.dat = errors, .var = "id", .fun = norm_errors)
+for(i in 4:ncol(errors)){
+  errors[is.na(errors[,i]), i] <- mean(errors[,i], na.rm = TRUE)
 }
-errors <- ddply(.dat = errors, .var = "id", .fun = normalize)
-write.table(errors, "test/test_error_unweighted_normed.txt", col.names = T, row.names = F, quote = F)
+write.table(errors, "test/test_error_unweighted_median_scaled.txt", col.names = T, row.names = F, quote = F)

@@ -7,10 +7,11 @@ library(rJava)
 library(extraTrees)
 
 args <- commandArgs(TRUE)
-
+i = as.numeric(args[2])
 
 # load in normalized error matrix
 errors <- read.table("error_files/errors_unweighted_normed.txt", header = T)
+errors$flag <- ifelse(errors$rmsd < i, 0, 1)
 errors$flag <- as.factor(errors$flag)
 rnas <- as.character(unique(errors$id))
 
@@ -72,8 +73,8 @@ test_score = as.vector(confusionMatrix(test$pred, test$flag)$byClass)
 cnames = names(confusionMatrix(test$pred, test$flag)$byClass)
 
 # write output 
-write.table(test[, c("id","rmsd","flag","pred","prob")], paste0("data/et_unfiltered_clf_result_", rna, ".txt"), col.names = F, row.names = F, quote = F)
-write.table(data.frame(cnames, test_score), paste0("data/et_unfiltered_clf_score_", rna, ".txt"), col.names = F, row.names = F, quote = F)
+write.table(test[, c("id","rmsd","flag","pred","prob")], paste0("data/threshold_selection/et_clf_result_", rna, "_", i, ".txt"), col.names = F, row.names = F, quote = F)
+write.table(data.frame(cnames, test_score), paste0("data/threshold_selection/et_clf_score_", rna, "_", i, ".txt"), col.names = F, row.names = F, quote = F)
 
 
 
